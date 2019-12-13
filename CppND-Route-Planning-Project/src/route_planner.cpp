@@ -91,15 +91,15 @@ std::vector<RouteModel::Node> RoutePlanner::ConstructFinalPath(RouteModel::Node 
     std::vector<RouteModel::Node> path_found;
     // RouteModel::Node *parentNode = current_node->parent;
 
-    std::cout << "start" << this->start_node->x << " : y " << this->start_node->y << std::endl;
-    std::cout << "end" << current_node->x << " : y " << current_node->y << std::endl;
+    //std::cout << "start" << this->start_node->x << " : y " << this->start_node->y << std::endl;
+    // std::cout << "end" << current_node->x << " : y " << current_node->y << std::endl;
    
     while (true) {
     
       path_found.push_back(*current_node);
       distance += current_node->distance(*current_node->parent);
-      std::cout << "distnace"<< distance << std::endl;
-      std::cout << "h"<< current_node->h_value << std::endl;
+      //std::cout << "distnace"<< distance << std::endl;
+      // std::cout << "h"<< current_node->h_value << std::endl;
       current_node = current_node->parent;
       if (current_node->parent == nullptr) break;
     }
@@ -111,7 +111,7 @@ std::vector<RouteModel::Node> RoutePlanner::ConstructFinalPath(RouteModel::Node 
     path_found.push_back(*current_node);
     // TODO: Implement your solution here.
     std::reverse(path_found.begin(), path_found.end());
-    std::cout << "path size " << path_found.size() << std::endl;
+    // std::cout << "path size " << path_found.size() << std::endl;
 
     distance *= m_Model.MetricScale(); // Multiply the distance by the scale of the map to get meters.
     return path_found;
@@ -127,20 +127,15 @@ std::vector<RouteModel::Node> RoutePlanner::ConstructFinalPath(RouteModel::Node 
 // - Store the final path in the m_Model.path attribute before the method exits. This path will then be displayed on the map tile.
 
 void RoutePlanner::AStarSearch() {
-  RouteModel::Node *current_node = start_node;
-  std::cout << start_node->parent << std::endl;
-
-  while (true) {
-    this->AddNeighbors(current_node);
-    current_node = this->NextNode();
-    
-    if (current_node == this->end_node) break;
-  }
-  std::cout << "found end" << std::endl;
-  std::cout << start_node->parent << std::endl;
-  this->start_node->parent = nullptr; 
-  // this->CalculateHValue(this->start_node);  
-  this->m_Model.path =  this->ConstructFinalPath(this->end_node);
   // TODO: Implement your solution here.
-
+  RouteModel::Node *current_node = this->start_node;
+ 
+  this->start_node->visited = true;
+  this->open_list.push_back(start_node);
+  while (!this->open_list.empty()) {
+    current_node = this->NextNode();
+    this->AddNeighbors(current_node);
+    if (current_node->distance(*this->end_node) == 0.0) break;
+  }
+  this->m_Model.path =  this->ConstructFinalPath(this->end_node);
 }
