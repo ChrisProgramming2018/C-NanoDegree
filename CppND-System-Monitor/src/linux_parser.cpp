@@ -2,6 +2,7 @@
 #include <unistd.h>
 #include <string>
 #include <vector>
+#include <iostream>
 
 #include "linux_parser.h"
 
@@ -35,13 +36,14 @@ string LinuxParser::OperatingSystem() {
 
 // DONE: An example of how to read data from the filesystem
 string LinuxParser::Kernel() {
-  string os, kernel;
+  string os, version,  kernel;
   string line;
   std::ifstream stream(kProcDirectory + kVersionFilename);
   if (stream.is_open()) {
     std::getline(stream, line);
     std::istringstream linestream(line);
-    linestream >> os >> kernel;
+    linestream >> os >> version >> kernel;
+
   }
   return kernel;
 }
@@ -66,8 +68,46 @@ vector<int> LinuxParser::Pids() {
   return pids;
 }
 
+
+float LinuxParser::getMemoryUtilization() {
+  std::string line;
+  std::string allInt = "0123456789";
+  std::string totalMemory = "MemTotal:";
+  std::string usedMemory = "MemAvailable:" ;
+  std::ifstream filestream(kProcDirectory + kMeminfoFilename);
+  int start;
+  int end;
+  int valueTotalMemory;
+  float valueMemAvailable;
+  if (filestream.is_open()) {
+    while (std::getline(filestream, line)) {
+      int found = line.find(totalMemory);
+      if (found!=std::string::npos) {
+        start = line.find_first_of(allInt);
+        end = line.find_last_of(allInt);
+        valueTotalMemory =  std::stoi(line.substr(start, end));
+      }
+      found = line.find(usedMemory);
+      if (found!=std::string::npos) {
+        start = line.find_first_of(allInt);
+        end = line.find_last_of(allInt);
+        valueMemAvailable =  std::stoi(line.substr(start, end));
+      }
+    }
+  }
+  float percentUsed = (valueTotalMemory - valueMemAvailable) / valueTotalMemory;
+  // std::cout << "number av " << percentUsed << std::endl;
+  return percentUsed;
+}
+
+
+
+
+
 // TODO: Read and return the system memory utilization
-float LinuxParser::MemoryUtilization() { return 0.0; }
+float LinuxParser::MemoryUtilization() { 
+  return getMemoryUtilization(); 
+}
 
 // TODO: Read and return the system uptime
 long LinuxParser::UpTime() { return 0; }
