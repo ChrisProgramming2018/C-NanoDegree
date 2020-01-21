@@ -51,7 +51,7 @@ void NCursesDisplay::DisplaySystem(System& system, WINDOW* window) {
       window, ++row, 2,
       ("Running Processes: " + to_string(system.RunningProcesses())).c_str());
   mvwprintw(window, ++row, 2,
-            ("Up Time: " + Format::ElapsedTime(system.UpTime())).c_str());
+            ("Up Time: " + system.UpTime()).c_str());
   wrefresh(window);
 }
 

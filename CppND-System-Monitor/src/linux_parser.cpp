@@ -100,9 +100,20 @@ float LinuxParser::getMemoryUtilization() {
   return percentUsed;
 }
 
-
-
-
+long LinuxParser::getUpTime() {
+  std::string allInt = "0123456789";
+  std::string line;
+  long int upTime;
+  int start;
+  int end;
+  std::ifstream filestream(kProcDirectory + kUptimeFilename);
+    while (std::getline(filestream, line)) {
+      start = line.find_first_of(allInt);
+      end  = line.find_first_not_of(allInt);
+      upTime = std::stoi(line.substr(start, end));
+    }
+    return upTime;
+}
 
 // TODO: Read and return the system memory utilization
 float LinuxParser::MemoryUtilization() { 
@@ -110,7 +121,10 @@ float LinuxParser::MemoryUtilization() {
 }
 
 // TODO: Read and return the system uptime
-long LinuxParser::UpTime() { return 0; }
+long LinuxParser::UpTime() { 
+   
+  return 0; 
+}
 
 // TODO: Read and return the number of jiffies for the system
 long LinuxParser::Jiffies() { return 0; }
@@ -152,4 +166,4 @@ string LinuxParser::User(int pid[[maybe_unused]]) { return string(); }
 
 // TODO: Read and return the uptime of a process
 // REMOVE: [[maybe_unused]] once you define the function
-long LinuxParser::UpTime(int pid[[maybe_unused]]) { return 0; }
+long int LinuxParser::UpTime(int pid[[maybe_unused]]) { return 0; }
