@@ -36,7 +36,9 @@ float System::MemoryUtilization() {
 }
 
 // TODO: Return the operating system name
-std::string System::OperatingSystem() { return string(); }
+std::string System::OperatingSystem() { 
+  return LinuxParser::OperatingSystem(); 
+}
 
 // TODO: Return the number of processes actively running on the system
 int System::RunningProcesses() { return 0; }
@@ -47,7 +49,7 @@ int System::TotalProcesses() { return 0; }
 // TODO: Return the number of seconds since the system started running
 string System::UpTime() { 
   string currentTime = "";
-  long int time = LinuxParser::getUpTime();
+  long int time = LinuxParser::UpTime();
   int hour = time / 3600;
   int min = (time / 60) % 60 ;
   int sec = time % 60;
