@@ -5,6 +5,9 @@ int main() {
   System system;
   // system.Kernel();
   // system.MemoryUtilization();
- // system.Cpu();
- NCursesDisplay::Display(system);
+  //system.Cpu(1).Utilization();
+  std::cout << "Main " << std::endl;
+  //std::cout << system.Cpu(1).Utilization() << std::endl;
+  system.updateCpuUtilization();
+  // NCursesDisplay::Display(system);
 }

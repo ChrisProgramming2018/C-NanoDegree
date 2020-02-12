@@ -17,16 +17,52 @@ using std::vector;
 
 
 System::System() {
-  _amountCores = LinuxParser::CpuUtilization().size();
+  _amountCores = LinuxParser::CpuUtilization().size();   // get amount of cores
+  std::cout << "amount of corse" << _amountCores << std::endl;
+  // create for each core a instance of processort
+  for(int i = 0; i <= _amountCores; i++) {
+    Processor p;
+    _listOfCores.push_back(p);
+  }
+}
+
+
+void computeTime(Processor &pro, std::string line) {
+  std::cout << "compute" << std::endl;
+  std::cout << line << std::endl;
+  std::string name;
+  std::string name1, name2, name3, name4;
+  std::string name5, name6, name7;
+  
+  int userTime, niceTime, systemTime;
+  int idleTime, ioWait, irq, guestnice;
+  std::istringstream linestream(line);
+  linestream >> name >> name1 >>  name2 >>  name3 >> name4 >> name5 >>  name6 >>  name7;  
+  std::cout << name << std::endl;
+  int userTime = std::stoi(name1);
+  int niceTime = std::stoi(name2);
+  int systemTime = std::stoi(name3);
+  int idleTime = std::stoi(name4);
+  int ioWait = std::stoi(name5);
+  int irq = std::stoi(name6);
+  int guestnice = std::stoi(name7);
+
+}
+
+
+void System::updateCpuUtilization() {
+  std::cout << "update Cpu" << std::endl;
+  std::cout << "size of core list" << _listOfCores.size() <<std::endl;
+  vector<string> cpuLines = LinuxParser::CpuUtilization();
+  for (int i = 0; i < cpuLines.size(); i++) {
+   computeTime(_listOfCores[i], cpuLines[i]);
+  }
 }
 
 
 // TODO: Return the system's CPU
-Processor& System::Cpu() {
-  vector<string> cpuLines = LinuxParser::CpuUtilization();
-  for (int i = 0; i <= cpuLines.size(); i++) {
-    // std::cout << cpuLines[i] << std::endl;
-  }
+Processor& System::Cpu(int number) {
+  
   return cpu_; 
 }
 
