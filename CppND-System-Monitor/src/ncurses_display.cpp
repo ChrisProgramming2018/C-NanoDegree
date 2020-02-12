@@ -14,27 +14,32 @@ using std::to_string;
 
 // 50 bars uniformly displayed from 0 - 100 %
 // 2% is one bar(|)
+// ___________________________________________________________________________________
 std::string NCursesDisplay::ProgressBar(float percent) {
   std::string result{"0%"};
   int size{50};
   float bars{percent * size};
-
   for (int i{0}; i < size; ++i) {
     result += i <= bars ? '|' : ' ';
   }
-
   string display{to_string(percent * 100).substr(0, 4)};
   if (percent < 0.1 || percent == 1.0)
     display = " " + to_string(percent * 100).substr(0, 3);
   return result + " " + display + "/100%";
 }
 
+// ___________________________________________________________________________________
 void NCursesDisplay::DisplaySystem(System& system, WINDOW* window) {
   int row{0};
   mvwprintw(window, ++row, 2, ("OS: " + system.OperatingSystem()).c_str());
   mvwprintw(window, ++row, 2, ("Kernel: " + system.Kernel()).c_str());
-  for (int i= 1; i <= 6; i++) {
-    mvwprintw(window, ++row, 2, "CPU: ");
+  for (int i= 1; i <= system._amountCores; i++) {
+    if (i >= 2) {
+      std::string name = "CPU " + to_string(i-1);
+      mvwprintw(window, ++row, 2, name.c_str());
+    } else {
+      mvwprintw(window, ++row, 2, "CPU: ");
+    }
     wattron(window, COLOR_PAIR(1));
     mvwprintw(window, row, 10, "");
     wprintw(window, ProgressBar(system.Cpu().Utilization()).c_str());
@@ -55,8 +60,8 @@ void NCursesDisplay::DisplaySystem(System& system, WINDOW* window) {
   wrefresh(window);
 }
 
-void NCursesDisplay::DisplayProcesses(std::vector<Process>& processes,
-                                      WINDOW* window, int n) {
+// ___________________________________________________________________________________
+void NCursesDisplay::DisplayProcesses(std::vector<Process>& processes, WINDOW* window, int n) {
   int row{0};
   int const pid_column{2};
   int const user_column{9};
@@ -85,6 +90,7 @@ void NCursesDisplay::DisplayProcesses(std::vector<Process>& processes,
   }
 }
 
+// ___________________________________________________________________________________
 void NCursesDisplay::Display(System& system, int n) {
   initscr();      // start ncurses
   noecho();       // do not print input values
@@ -93,7 +99,7 @@ void NCursesDisplay::Display(System& system, int n) {
 
   int x_max{getmaxx(stdscr)};
   std::cout << x_max << std::endl;
-  WINDOW* system_window = newwin(9+5, x_max - 1, 0, 0);
+  WINDOW* system_window = newwin(9 + system._amountCores, x_max - 1, 0, 0);
   WINDOW* process_window =
       newwin(3 + n, x_max - 1, system_window->_maxy + 1, 0);
   while (1) {
