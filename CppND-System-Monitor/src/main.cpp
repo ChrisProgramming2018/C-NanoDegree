@@ -5,6 +5,6 @@ int main() {
   System system;
   // system.Kernel();
   // system.MemoryUtilization();
-  // system.TotalProcesses();
+  //system.Cpu();
   NCursesDisplay::Display(system);
 }

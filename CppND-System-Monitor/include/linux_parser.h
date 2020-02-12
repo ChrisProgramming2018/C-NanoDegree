@@ -57,7 +57,8 @@ long int UpTime(int pid);
 // Memory
 float getMemoryUtilization();
 
-
+// Uptime
+long getUpTime();
 };  // namespace LinuxParser
 
 #endif
