@@ -33,6 +33,7 @@ void NCursesDisplay::DisplaySystem(System& system, WINDOW* window) {
   int row{0};
   mvwprintw(window, ++row, 2, ("OS: " + system.OperatingSystem()).c_str());
   mvwprintw(window, ++row, 2, ("Kernel: " + system.Kernel()).c_str());
+  system.updateCpuUtilization();
   for (int i= 1; i <= system._amountCores; i++) {
     if (i >= 2) {
       std::string name = "CPU " + to_string(i-1);
@@ -42,7 +43,7 @@ void NCursesDisplay::DisplaySystem(System& system, WINDOW* window) {
     }
     wattron(window, COLOR_PAIR(1));
     mvwprintw(window, row, 10, "");
-    wprintw(window, ProgressBar(system.Cpu().Utilization()).c_str());
+    wprintw(window, ProgressBar(system.Cpu(i-1).Utilization()).c_str());
     wattroff(window, COLOR_PAIR(1));
   }
   mvwprintw(window, ++row, 2, "Memory: ");

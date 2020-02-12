@@ -19,7 +19,7 @@ using std::vector;
 
 System::System() {
   _amountCores = LinuxParser::CpuUtilization().size();   // get amount of cores
-  std::cout << "amount of corse" << _amountCores << std::endl;
+  // std::cout << "amount of corse" << _amountCores << std::endl;
   // create for each core a instance of processort
   for(int i = 0; i <= _amountCores; i++) {
     Processor p;
@@ -29,7 +29,7 @@ System::System() {
 
 
 void computeTime(Processor *pro, std::string line, bool old) {
-  std::cout << "compute" << std::endl;
+  // std::cout << "compute" << std::endl;
   // std::cout << line << std::endl;
   std::string name;
   std::string name1, name2, name3, name4, name5;
@@ -37,7 +37,8 @@ void computeTime(Processor *pro, std::string line, bool old) {
   
   std::istringstream linestream(line);
   linestream >> name >> name1 >>  name2 >>  name3 >> name4 >> name5 >>  name6 >>  name7 >> name8 >> name9 >> name10 ;  
-  std::cout << name << std::endl;
+  pro->_name = name;
+  // std::cout << name << std::endl;
   int userTime = std::stoi(name1);
   int niceTime = std::stoi(name2);
   int systemTime = std::stoi(name3);
@@ -67,13 +68,14 @@ void computeTime(Processor *pro, std::string line, bool old) {
 
 
 void System::updateCpuUtilization() {
-  std::cout << "update Cpu" << std::endl;
-  std::cout << "size of core list" << _listOfCores.size() <<std::endl;
+  // std::cout << "update Cpu" << std::endl;
+  // std::cout << "size of core list" << _listOfCores.size() <<std::endl;
   vector<string> cpuLines = LinuxParser::CpuUtilization();
   for (int i = 0; i < cpuLines.size(); i++) {
    computeTime(&_listOfCores[i], cpuLines[i], true);
   }
-  std::this_thread::sleep_for (std::chrono::seconds(1));
+  std::this_thread::sleep_for (std::chrono::milliseconds(500));
+ 
   cpuLines = LinuxParser::CpuUtilization();
   for (int i = 0; i < cpuLines.size(); i++) {
    computeTime(&_listOfCores[i], cpuLines[i], false);
@@ -86,8 +88,7 @@ void System::updateCpuUtilization() {
     totalTimeDiff = p->_totalTimeNew - p->_totalTimeOld;
     idleallTimeDiff = p->_idleallTimeNew -p->_idleallTimeOld;
     p->_cpuUsage =(totalTimeDiff - idleallTimeDiff) / totalTimeDiff; 
-    std::cout << " Cpu " <<i << " "  << p->_cpuUsage << std::endl;
-   
+    // std::cout << " Cpu " << i << " "  << p->_cpuUsage << std::endl;
   }
 
 }
@@ -95,7 +96,7 @@ void System::updateCpuUtilization() {
 
 // TODO: Return the system's CPU
 Processor& System::Cpu(int number) {
-  
+  cpu_ = _listOfCores[number]; 
   return cpu_; 
 }
 

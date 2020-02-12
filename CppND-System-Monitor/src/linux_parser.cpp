@@ -162,7 +162,7 @@ long LinuxParser::IdleJiffies() {
 vector<string> LinuxParser::CpuUtilization() { 
   string line;
   string key = "cpu";
-  std::cout << "linuxparser " << std::endl;
+  // std::cout << "linuxparser " << std::endl;
   int found;
   vector<string> cpus = {};
   std::ifstream filestream(kProcDirectory + kStatFilename);
