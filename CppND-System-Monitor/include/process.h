@@ -2,6 +2,7 @@
 #define PROCESS_H
 
 #include <string>
+#include <iostream>
 /*
 Basic class for Process representation
 It contains relevant attributes as shown below
