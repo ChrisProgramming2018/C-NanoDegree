@@ -4,7 +4,8 @@
 #include <string>
 #include <vector>
 #include <iostream>
-
+#include <thread>         
+#include <chrono>         
 #include "process.h"
 #include "processor.h"
 #include "system.h"
@@ -27,17 +28,15 @@ System::System() {
 }
 
 
-void computeTime(Processor &pro, std::string line) {
+void computeTime(Processor *pro, std::string line, bool old) {
   std::cout << "compute" << std::endl;
-  std::cout << line << std::endl;
+  // std::cout << line << std::endl;
   std::string name;
-  std::string name1, name2, name3, name4;
-  std::string name5, name6, name7;
+  std::string name1, name2, name3, name4, name5;
+  std::string name6, name7, name8, name9, name10;
   
-  int userTime, niceTime, systemTime;
-  int idleTime, ioWait, irq, guestnice;
   std::istringstream linestream(line);
-  linestream >> name >> name1 >>  name2 >>  name3 >> name4 >> name5 >>  name6 >>  name7;  
+  linestream >> name >> name1 >>  name2 >>  name3 >> name4 >> name5 >>  name6 >>  name7 >> name8 >> name9 >> name10 ;  
   std::cout << name << std::endl;
   int userTime = std::stoi(name1);
   int niceTime = std::stoi(name2);
@@ -45,8 +44,25 @@ void computeTime(Processor &pro, std::string line) {
   int idleTime = std::stoi(name4);
   int ioWait = std::stoi(name5);
   int irq = std::stoi(name6);
-  int guestnice = std::stoi(name7);
-
+  int softIrq = std::stoi(name7);
+  int steal = std::stoi(name8);
+  int guest = std::stoi(name9);
+  int guestnice = std::stoi(name10);
+ 
+  userTime = userTime - guest;
+  niceTime = niceTime - guestnice;
+  int idleallTime = idleTime + ioWait;
+  int systemallTime = systemTime + irq + softIrq;
+  int virtallTime = guest + guestnice;
+  if (old) {
+    pro->_idleallTimeOld = idleallTime;
+    pro->_totalTimeOld = userTime + niceTime + systemallTime + idleallTime + steal + virtallTime;
+    pro->_busyOld =  userTime + niceTime + systemallTime + steal + virtallTime;
+  } else {
+    pro->_idleallTimeNew = idleallTime;
+    pro->_totalTimeNew = userTime + niceTime + systemallTime + idleallTime + steal + virtallTime;
+    pro->_busyNew =  userTime + niceTime + systemallTime + steal + virtallTime;
+  }
 }
 
 
@@ -55,8 +71,25 @@ void System::updateCpuUtilization() {
   std::cout << "size of core list" << _listOfCores.size() <<std::endl;
   vector<string> cpuLines = LinuxParser::CpuUtilization();
   for (int i = 0; i < cpuLines.size(); i++) {
-   computeTime(_listOfCores[i], cpuLines[i]);
+   computeTime(&_listOfCores[i], cpuLines[i], true);
   }
+  std::this_thread::sleep_for (std::chrono::seconds(1));
+  cpuLines = LinuxParser::CpuUtilization();
+  for (int i = 0; i < cpuLines.size(); i++) {
+   computeTime(&_listOfCores[i], cpuLines[i], false);
+  }
+  int totalTimeDiff;
+  float idleallTimeDiff;
+  float cpuUsage;
+  for (int i = 0; i < cpuLines.size(); i++) {
+    Processor *p = &_listOfCores[i];
+    totalTimeDiff = p->_totalTimeNew - p->_totalTimeOld;
+    idleallTimeDiff = p->_idleallTimeNew -p->_idleallTimeOld;
+    p->_cpuUsage =(totalTimeDiff - idleallTimeDiff) / totalTimeDiff; 
+    std::cout << " Cpu " <<i << " "  << p->_cpuUsage << std::endl;
+   
+  }
+
 }
 
 
