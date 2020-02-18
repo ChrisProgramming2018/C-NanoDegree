@@ -206,40 +206,114 @@ int LinuxParser::TotalProcesses() {
 // TODO: Read and return the number of running processes
 // _____________________________________________________________________
 int LinuxParser::RunningProcesses() { 
-  return 0; 
+  return static_cast<int>(Pids().size());; 
 }
 
 // TODO: Read and return the command associated with a process
 // REMOVE: [[maybe_unused]] once you define the function
 // _____________________________________________________________________
-string LinuxParser::Command(int pid[[maybe_unused]]) { 
+string LinuxParser::Command(int pid) { 
+  std::string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+  std::string line;
+  std::string rest;
+  int start;
+  int end;
+  int res;
+  std::ifstream filestream(kProcDirectory + std::to_string(pid) + kStatusFilename);
+  while (std::getline(filestream, line)) {
+    std::size_t found = line.find("Name:");
+    if (found!=std::string::npos) {
+      // std::cout << "Pid " << pid  << std::endl;
+      start = line.find_first_not_of(chars);
+      rest  = line.substr(start);
+      start = rest.find_first_of(chars);
+      rest  = rest.substr(start);
+    return rest;
+    }
+  }
   return string(); 
 }
 
 // TODO: Read and return the memory used by a process
 // REMOVE: [[maybe_unused]] once you define the function
 // _____________________________________________________________________
-string LinuxParser::Ram(int pid[[maybe_unused]]) { 
-  return string(); 
+string LinuxParser::Ram(int pid) { 
+  std::string allInt = "0123456789";
+  std::string line;
+  std::string rest;
+  int start;
+  int end;
+  int res;
+  std::ifstream filestream(kProcDirectory + std::to_string(pid) + kStatusFilename);
+  while (std::getline(filestream, line)) {
+    std::size_t found = line.find("VmData:");
+    if (found!=std::string::npos) {
+      // std::cout << "Pid " << pid  << std::endl;
+      start = line.find_first_of(allInt);
+      rest  =  line.substr(start);
+      end = rest.find_first_not_of(allInt);
+      rest = line.substr(start, end);
+      res = std::stoi(rest);
+    }
+      // start = line.find_first_of(allInt);
+      //end  = line.find_first_not_of(allInt);
+      // upTime = std::stoi(line.substr(start, end));
+      // // std::cout << "number av " << percentUsed << std::endl;
+
+  
+  }
+  res = res / 1024;
+  //std::cout << "cache in MB " << res << std::endl;
+  return std::to_string(res); 
 }
 
 // TODO: Read and return the user ID associated with a process
 // REMOVE: [[maybe_unused]] once you define the function
 // _____________________________________________________________________
-string LinuxParser::Uid(int pid[[maybe_unused]]) { 
+string LinuxParser::Uid(int pid) { 
   return string(); 
 }
 
 // TODO: Read and return the user associated with a process
 // REMOVE: [[maybe_unused]] once you define the function
 // _____________________________________________________________________
-string LinuxParser::User(int pid[[maybe_unused]]) { 
+string LinuxParser::User(int pid) { 
+  
   return string(); 
 }
 
 // TODO: Read and return the uptime of a process
 // REMOVE: [[maybe_unused]] once you define the function
 // _____________________________________________________________________
-long int LinuxParser::UpTime(int pid[[maybe_unused]]) { 
+long int LinuxParser::UpTime(int pid) { 
+  std::string line;
+  std::string path = "/proc/" + std::to_string(pid) + "/stat";
+  std::ifstream filestream(path);
+  if (filestream.is_open()) {
+    std::getline(filestream, line);
+  }
+  
+  std::istringstream iss(line);
+
+  long utime;
+  long stime;
+  long cutime;
+  long cstime;
+  long startTime;
+  int count = 1;
+  do {
+    std::string subs;
+    iss >> subs;
+    if (count == 14) utime = std::stoi(subs);
+    if (count == 15) stime = std::stoi(subs);
+    if (count == 16) cutime = std::stoi(subs);
+    if (count == 17) cstime = std::stoi(subs);
+    if (count == 22) startTime = std::stoi(subs);
+    count++;
+  } while (iss);
+  
+  long total_time = utime + stime;
+  total_time = total_time + cutime + cstime; 
+  std::cout << "Time  " << total_time <<std::endl;
   return 0; 
 }

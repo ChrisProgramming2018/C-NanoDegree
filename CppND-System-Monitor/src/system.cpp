@@ -16,7 +16,7 @@ using std::size_t;
 using std::string;
 using std::vector;
 
-
+// __________________________________________________________________________________________________________________________________________________
 System::System() {
   _amountCores = LinuxParser::CpuUtilization().size();   // get amount of cores
   // std::cout << "amount of corse" << _amountCores << std::endl;
@@ -25,9 +25,11 @@ System::System() {
     Processor p;
     _listOfCores.push_back(p);
   }
+  // get processes
 }
 
 
+// __________________________________________________________________________________________________________________________________________________
 void computeTime(Processor *pro, std::string line, bool old) {
   // std::cout << "compute" << std::endl;
   // std::cout << line << std::endl;
@@ -67,23 +69,23 @@ void computeTime(Processor *pro, std::string line, bool old) {
 }
 
 
+// __________________________________________________________________________________________________________________________________________________
 void System::updateCpuUtilization() {
   // std::cout << "update Cpu" << std::endl;
   // std::cout << "size of core list" << _listOfCores.size() <<std::endl;
   vector<string> cpuLines = LinuxParser::CpuUtilization();
-  for (int i = 0; i < cpuLines.size(); i++) {
+  for (int i = 0; i < static_cast<int>(cpuLines.size()); i++) {
    computeTime(&_listOfCores[i], cpuLines[i], true);
   }
   std::this_thread::sleep_for (std::chrono::milliseconds(500));
  
   cpuLines = LinuxParser::CpuUtilization();
-  for (int i = 0; i < cpuLines.size(); i++) {
+  for (int i = 0; i < static_cast<int>(cpuLines.size()); i++) {
    computeTime(&_listOfCores[i], cpuLines[i], false);
   }
   int totalTimeDiff;
   float idleallTimeDiff;
-  float cpuUsage;
-  for (int i = 0; i < cpuLines.size(); i++) {
+  for (int i = 0; i < static_cast<int>(cpuLines.size()); i++) {
     Processor *p = &_listOfCores[i];
     totalTimeDiff = p->_totalTimeNew - p->_totalTimeOld;
     idleallTimeDiff = p->_idleallTimeNew -p->_idleallTimeOld;
@@ -94,44 +96,79 @@ void System::updateCpuUtilization() {
 }
 
 
-// TODO: Return the system's CPU
+// __________________________________________________________________________________________________________________________________________________
+//  Return the system's CPU
 Processor& System::Cpu(int number) {
   cpu_ = _listOfCores[number]; 
   return cpu_; 
 }
 
-// TODO: Return a container composed of the system's processes
+// __________________________________________________________________________________________________________________________________________________
+//  Return a container composed of the system's processes
 vector<Process>& System::Processes() { 
+  // std::cout << "system Processess" << std::endl;
+  std::vector<int> pids =  LinuxParser::Pids();
+  int number;
+  processes_.clear();
+  for (int i = 0; i < static_cast<int>(pids.size()); i++) {
+    // std::cout << LinuxParser::Ram(pids[i]) << std::endl;
+    number = pids[i];
+    // std::cout << number << std::endl;
+    Process p1(number);
+    p1.setRam(LinuxParser::Ram(number));
+    p1.setCommand(LinuxParser::Command(number));
+    p1.setUpTime(LinuxParser::UpTime(number));
+    // std::cout << p1.getCommand() << " "  << p1.getRam() << "  "   << std::endl;
+    processes_.push_back(p1);
+  
+  }
+  // sort vector after
+   std::sort(processes_.begin(), processes_.end());
+  //processes_.sort();
+  // int end = processes_.size();
+  int end = 10;
+  for(int i = 0; i < end; i++) {
+    std::cout << processes_[i].getCommand() << " "  << processes_[i].getRam() << " "  << processes_[i].getUpTime() << std::endl;
+  }
   return processes_; 
 }
 
+// __________________________________________________________________________________________________________________________________________________
 // Return the system's kernel identifier (string)
 std::string System::Kernel() { 
   return LinuxParser::Kernel(); 
 }
 
+// __________________________________________________________________________________________________________________________________________________
 // Return the system's memory utilization
 float System::MemoryUtilization() { 
   return LinuxParser::MemoryUtilization(); 
 }
 
+// __________________________________________________________________________________________________________________________________________________
 // Return the operating system name
 std::string System::OperatingSystem() { 
   return LinuxParser::OperatingSystem(); 
 }
 
-// TODO: Return the number of processes actively running on the system
-int System::RunningProcesses() { return 0; }
+// __________________________________________________________________________________________________________________________________________________
+// Return the number of processes actively running on the system
+int System::RunningProcesses() { 
+  return  LinuxParser::RunningProcesses();
+}
 
+// __________________________________________________________________________________________________________________________________________________
 // Return the total number of processes on the system
 int System::TotalProcesses() { 
   return LinuxParser::TotalProcesses(); 
 }
 
+// __________________________________________________________________________________________________________________________________________________
 // Return the number of seconds since the system started running
 string System::UpTime() { 
   string currentTime = "";
   long int time = LinuxParser::UpTime();
+  _upTime = time;
   int hour = time / 3600;
   int min = (time / 60) % 60 ;
   int sec = time % 60;

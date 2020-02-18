@@ -18,5 +18,6 @@ int main() {
     // std::cout << "\r" << system.Cpu(6).Utilization() << std::endl;
     // std::cout << "\r" << system.Cpu(7).Utilization() << std::endl;
   //}
-  NCursesDisplay::Display(system);
+  system.Processes();
+  //NCursesDisplay::Display(system);
 }
