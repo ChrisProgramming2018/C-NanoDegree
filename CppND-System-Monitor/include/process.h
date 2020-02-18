@@ -21,10 +21,13 @@ class Process {
   std::string getRam();
   void setCommand(std::string name);
   std::string getCommand();
+  void setUpTime(long int time);
+  long int getUpTime();
   
   int _pid;
   std::string _ram;
   std::string _command;
+  long int _upTime;
  private:
 };
 

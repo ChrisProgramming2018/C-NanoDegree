@@ -20,7 +20,7 @@ class System {
   std::string Kernel();               // TODO: See src/system.cpp
   std::string OperatingSystem();      // TODO: See src/system.cpp
   int _amountCores;
-
+  long int _upTime;
  private:
   // void  computeTime(Processor &pro, std::string line);
   Processor cpu_ = {};
