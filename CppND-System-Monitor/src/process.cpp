@@ -55,13 +55,14 @@ long int Process::getUpTime() {
 // ________________________________________________________________________________________________
 // TODO: Return this process's CPU utilization
 float Process::CpuUtilization() { 
-  
-  return 0; 
+  return _cpu; 
 }
 
 // ________________________________________________________________________________________________
-// TODO: Return the command that generated this process
-string Process::Command() { return string(); }
+// Return the command that generated this process
+string Process::Command() { 
+  return _command; 
+}
 
 // ________________________________________________________________________________________________
 // TODO: Return this process's memory utilization
@@ -69,7 +70,9 @@ string Process::Ram() {
 
   return _ram; 
 }
-
+void Process::setCpuUtilization(float cpu) {
+  _cpu = cpu;
+}
 // ________________________________________________________________________________________________
 // TODO: Return the user (name) that generated this process
 string Process::User() { 
@@ -81,14 +84,15 @@ string Process::User() {
 // ________________________________________________________________________________________________
 // TODO: Return the age of this process (in seconds)
 long int Process::UpTime() { 
-  
-  return 0; }
+
+  return _upTime; }
 
 // ________________________________________________________________________________________________
 // TODO: Overload the "less than" comparison operator for Process objects
 // REMOVE: [[maybe_unused]] once you define the function
 bool Process::operator<(Process const& a) const { 
   // std::cout << "sort " << std::endl;
-  return _command < a._command;
+  // return _command < a._command;
   // return _ram > a._ram; 
+  return _cpu > a._cpu;
 }

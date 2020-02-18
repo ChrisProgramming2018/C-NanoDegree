@@ -5,7 +5,7 @@
 #include <iostream>
 
 #include "linux_parser.h"
-
+#include "format.h"
 using std::stof;
 using std::string;
 using std::to_string;
@@ -281,6 +281,41 @@ string LinuxParser::User(int pid) {
   
   return string(); 
 }
+// _____________________________________________________________________
+float LinuxParser::ProcessCpuUtilization(int pid) {
+  std::string line;
+  std::string path = "/proc/" + std::to_string(pid) + "/stat";
+  std::ifstream filestream(path);
+  if (filestream.is_open()) {
+    std::getline(filestream, line);
+  }
+  
+  std::istringstream iss(line);
+
+  long utime;
+  long stime;
+  long cutime;
+  long cstime;
+  long startTime;
+  int count = 1;
+  do {
+    std::string subs;
+    iss >> subs;
+    if (count == 14) utime = std::stoi(subs);
+    if (count == 15) stime = std::stoi(subs);
+    if (count == 16) cutime = std::stoi(subs);
+    if (count == 17) cstime = std::stoi(subs);
+    if (count == 22) startTime = std::stoi(subs);
+    count++;
+  } while (iss);
+  
+  int totalTime = utime + stime;
+  totalTime = totalTime + cutime + cstime;
+  int Hertz = 100;
+  float seconds = UpTime() - (startTime/ Hertz);
+  return (totalTime / Hertz) / seconds;
+}
+  
 
 // TODO: Read and return the uptime of a process
 // REMOVE: [[maybe_unused]] once you define the function
@@ -312,8 +347,8 @@ long int LinuxParser::UpTime(int pid) {
     count++;
   } while (iss);
   
-  long total_time = utime + stime;
-  total_time = total_time + cutime + cstime; 
-  std::cout << "Time  " << total_time <<std::endl;
-  return 0; 
+  int totalTime = utime + stime;
+  totalTime = totalTime + cutime + cstime; 
+
+  return   UpTime() - (startTime/100);
 }

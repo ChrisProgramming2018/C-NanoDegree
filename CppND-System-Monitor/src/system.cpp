@@ -118,6 +118,7 @@ vector<Process>& System::Processes() {
     p1.setRam(LinuxParser::Ram(number));
     p1.setCommand(LinuxParser::Command(number));
     p1.setUpTime(LinuxParser::UpTime(number));
+    p1.setCpuUtilization(LinuxParser::ProcessCpuUtilization(number));
     // std::cout << p1.getCommand() << " "  << p1.getRam() << "  "   << std::endl;
     processes_.push_back(p1);
   
@@ -128,7 +129,7 @@ vector<Process>& System::Processes() {
   // int end = processes_.size();
   int end = 10;
   for(int i = 0; i < end; i++) {
-    std::cout << processes_[i].getCommand() << " "  << processes_[i].getRam() << " "  << processes_[i].getUpTime() << std::endl;
+    // std::cout << processes_[i].getCommand() << " Ram "  << processes_[i].getRam() << " Time "  << processes_[i].getUpTime() << std::endl;
   }
   return processes_; 
 }
