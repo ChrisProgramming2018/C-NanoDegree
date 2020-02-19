@@ -17,8 +17,7 @@ Process::Process(int pid){
 
 // ________________________________________________________________________________________________
 // Return this process's ID
-int Process::Pid() { 
-  
+int Process::Pid() {   
   return _pid; 
 }
 
@@ -47,13 +46,18 @@ std::string Process::getCommand() {
 void Process::setUpTime(long int time) {
   _upTime = time;
 }
+
 // ________________________________________________________________________________________________
 long int Process::getUpTime() {
   return _upTime;
 }
 
 // ________________________________________________________________________________________________
-// TODO: Return this process's CPU utilization
+void Process::setUserName(std::string name) {
+  _userName = name;
+}
+// ________________________________________________________________________________________________
+// Return this process's CPU utilization
 float Process::CpuUtilization() { 
   return _cpu; 
 }
@@ -67,7 +71,6 @@ string Process::Command() {
 // ________________________________________________________________________________________________
 // TODO: Return this process's memory utilization
 string Process::Ram() { 
-
   return _ram; 
 }
 void Process::setCpuUtilization(float cpu) {
@@ -75,16 +78,13 @@ void Process::setCpuUtilization(float cpu) {
 }
 // ________________________________________________________________________________________________
 // TODO: Return the user (name) that generated this process
-string Process::User() { 
-  string name = ""; 
-  
-  return name; 
+string Process::User() {  
+  return _userName; 
 }
 
 // ________________________________________________________________________________________________
 // TODO: Return the age of this process (in seconds)
 long int Process::UpTime() { 
-
   return _upTime; }
 
 // ________________________________________________________________________________________________

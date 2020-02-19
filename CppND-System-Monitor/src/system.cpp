@@ -119,18 +119,13 @@ vector<Process>& System::Processes() {
     p1.setCommand(LinuxParser::Command(number));
     p1.setUpTime(LinuxParser::UpTime(number));
     p1.setCpuUtilization(LinuxParser::ProcessCpuUtilization(number));
+    p1.setUserName(LinuxParser::User(number));
     // std::cout << p1.getCommand() << " "  << p1.getRam() << "  "   << std::endl;
     processes_.push_back(p1);
   
   }
   // sort vector after
    std::sort(processes_.begin(), processes_.end());
-  //processes_.sort();
-  // int end = processes_.size();
-  int end = 10;
-  for(int i = 0; i < end; i++) {
-    // std::cout << processes_[i].getCommand() << " Ram "  << processes_[i].getRam() << " Time "  << processes_[i].getUpTime() << std::endl;
-  }
   return processes_; 
 }
 
