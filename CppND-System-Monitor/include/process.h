@@ -23,11 +23,19 @@ class Process {
   std::string getCommand();
   void setUpTime(long int time);
   long int getUpTime();
+  void setCpuUtilization(float cpu); 
+  void setUserName(std::string name);
+  
   
   int _pid;
   std::string _ram;
   std::string _command;
+  std::string _userName;
+  
   long int _upTime;
+  long int _seconds;
+  long int _totalTime;
+  float  _cpu;
  private:
 };
 

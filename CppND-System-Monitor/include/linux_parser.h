@@ -26,7 +26,7 @@ int TotalProcesses();
 int RunningProcesses();
 std::string OperatingSystem();
 std::string Kernel();
-
+float ProcessCpuUtilization(int pid);
 // CPU
 enum CPUStates {
   kUser_ = 0,
