@@ -99,7 +99,6 @@ void NCursesDisplay::Display(System& system, int n) {
   start_color();  // enable color
 
   int x_max{getmaxx(stdscr)};
-  std::cout << x_max << std::endl;
   WINDOW* system_window = newwin(9 + system._amountCores, x_max - 1, 0, 0);
   WINDOW* process_window =
       newwin(3 + n, x_max - 1, system_window->_maxy + 1, 0);

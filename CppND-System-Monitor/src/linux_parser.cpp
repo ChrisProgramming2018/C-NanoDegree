@@ -335,7 +335,7 @@ float LinuxParser::ProcessCpuUtilization(int pid) {
 // TODO: Read and return the uptime of a process
 // REMOVE: [[maybe_unused]] once you define the function
 // _____________________________________________________________________
-long int LinuxParser::UpTime(int pid) { 
+long  LinuxParser::UpTime(int pid) { 
   std::string line;
   std::string path = "/proc/" + std::to_string(pid) + "/stat";
   std::ifstream filestream(path);

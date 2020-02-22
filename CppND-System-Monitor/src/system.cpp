@@ -7,6 +7,7 @@
 #include <thread>         
 #include <chrono>         
 #include "process.h"
+#include "format.h"
 #include "processor.h"
 #include "system.h"
 #include "linux_parser.h"
@@ -155,7 +156,7 @@ int System::RunningProcesses() {
   return  LinuxParser::RunningProcesses();
 }
 
-// __________________________________________________________________________________________________________________________________________________
+// __________________________t________________________________________________________________________________________________________________________
 // Return the total number of processes on the system
 int System::TotalProcesses() { 
   return LinuxParser::TotalProcesses(); 
@@ -165,17 +166,7 @@ int System::TotalProcesses() {
 // Return the number of seconds since the system started running
 string System::UpTime() { 
   string currentTime = "";
-  long int time = LinuxParser::UpTime();
+  long  time = LinuxParser::UpTime();
   _upTime = time;
-  int hour = time / 3600;
-  int min = (time / 60) % 60 ;
-  int sec = time % 60;
-  string pre_hour = "";
-  string pre_min = "";
-  string pre_sec = "";
-  if (sec < 10) { pre_sec = "0";}
-  if (min < 10) {pre_min = "0";}
-  if (hour < 10){ pre_hour = "0";}
-
-  return  pre_hour + std::to_string(hour) + ":" + pre_min + std::to_string(min) + ":" + pre_sec + std::to_string(sec);
+  return Format::ElapsedTime(time);  
 }
