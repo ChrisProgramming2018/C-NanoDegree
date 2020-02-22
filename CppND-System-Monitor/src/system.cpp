@@ -120,6 +120,8 @@ vector<Process>& System::Processes() {
     p1.setUpTime(LinuxParser::UpTime(number));
     p1.setCpuUtilization(LinuxParser::ProcessCpuUtilization(number));
     p1.setUserName(LinuxParser::User(number));
+    p1.setUid(LinuxParser::Uid(number));
+    p1.setUserName(LinuxParser::User(p1.getUid()));
     // std::cout << p1.getCommand() << " "  << p1.getRam() << "  "   << std::endl;
     processes_.push_back(p1);
   

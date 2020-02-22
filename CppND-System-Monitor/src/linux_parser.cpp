@@ -252,15 +252,49 @@ string LinuxParser::Ram(int pid) {
 
 //  Read and return the user ID associated with a process
 // _____________________________________________________________________
-string LinuxParser::Uid(int pid) { 
-  return string(); 
+int LinuxParser::Uid(int pid) { 
+  int uid, start, end;
+  std::string allInt = "0123456789";
+  std::string line, rest;
+  std::string key = "Uid:";
+  std::string path = "/proc/" + std::to_string(pid) + "/status";
+  std::ifstream filestream(path);
+  if (filestream.is_open()) {
+    while (std::getline(filestream, line)) {
+      std::size_t found = line.find(key);
+      if (found!=std::string::npos) {
+        start = line.find_first_of(allInt);
+        rest  =  line.substr(start);
+        end = rest.find_first_not_of(allInt);
+        rest = line.substr(start, end);
+        uid = std::stoi(rest);
+        // std::cout << uid << std::endl;
+      }
+    }
+  }
+  
+  return uid; 
 }
 
 // Read and return the user associated with a process
 // _____________________________________________________________________
 string LinuxParser::User(int pid) { 
-  
-  return "its me"; 
+  int uid,  end;
+  std::string line, rest;
+  std::string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+  std::string path = "/etc/passwd";
+  std::ifstream filestream(path);
+  if (filestream.is_open()) {
+    while (std::getline(filestream, line)) {
+      std::size_t found = line.find(std::to_string(pid));
+      if (found!=std::string::npos) {
+        end = line.find_first_not_of(chars);
+        rest  =  line.substr(0, end);
+        // std::cout << rest << std::endl;
+      }
+    }
+  }
+  return rest; 
 }
 // _____________________________________________________________________
 float LinuxParser::ProcessCpuUtilization(int pid) {

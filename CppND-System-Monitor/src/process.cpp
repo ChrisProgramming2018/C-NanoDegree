@@ -63,6 +63,16 @@ float Process::CpuUtilization() {
 }
 
 // ________________________________________________________________________________________________
+void Process::setUid(int uid) {
+  _uid = uid;
+}
+
+// ________________________________________________________________________________________________
+int Process::getUid() {
+   return _uid;
+}
+
+// ________________________________________________________________________________________________
 // Return the command that generated this process
 string Process::Command() { 
   return _command; 
