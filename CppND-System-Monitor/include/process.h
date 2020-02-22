@@ -25,13 +25,14 @@ class Process {
   long int getUpTime();
   void setCpuUtilization(float cpu); 
   void setUserName(std::string name);
-  
+  void setUid(int uid);
+  int getUid(); 
   
   int _pid;
   std::string _ram;
   std::string _command;
   std::string _userName;
-  
+  int _uid;  
   long int _upTime;
   long int _seconds;
   long int _totalTime;
