@@ -1,6 +1,12 @@
-#include "route_model.h"
-#include <iostream>
+// Copyright 2020
+// Udacity Project
+// Author: Christian Leininger <info2016frei@gmail.com>
 
+
+#include <iostream>
+#include <limits>
+#include <vector>
+#include "../include/route_model.h"
 
 // _______________________________________________________________________________________________
 RouteModel::RouteModel(const std::vector<std::byte> &xml) : Model(xml) {
@@ -33,7 +39,7 @@ void RouteModel::CreateNodeToRoadHashmap() {
 RouteModel::Node *RouteModel::Node::FindNeighbor(std::vector<int> node_indices) {
   Node *closest_node = nullptr;
   Node node;
-  
+
   for (int node_index : node_indices) {
     node = parent_model->SNodes()[node_index];
     if (this->distance(node) != 0 && !node.visited) {
@@ -62,7 +68,7 @@ RouteModel::Node &RouteModel::FindClosestNode(float x, float y) {
   Node input;
   input.x = x;
   input.y = y;
-  
+
   float min_dist = std::numeric_limits<float>::max();
   float dist;
   int closest_idx;
