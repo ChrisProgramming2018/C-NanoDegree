@@ -1,3 +1,8 @@
+// Copyright 2020
+// // Udacity Project
+// // Author: Christian Leininger <info2016frei@gmail.com>
+
+
 #include <curses.h>
 #include <chrono>
 #include <string>
@@ -5,9 +10,9 @@
 #include <vector>
 #include <iostream>
 
-#include "format.h"
-#include "ncurses_display.h"
-#include "system.h"
+#include "../include/format.h"
+#include "../include/ncurses_display.h"
+#include "../include/system.h"
 
 using std::string;
 using std::to_string;
