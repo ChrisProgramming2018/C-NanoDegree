@@ -1,15 +1,17 @@
-#include "processor.h"
+// Copyright 2020
+// // Udacity Project
+// // Author: Christian Leininger <info2016frei@gmail.com>
 
-// TODO: Return the aggregate CPU utilization
-float Processor::Utilization() { 
-  // compute the percent of 
-   
-  // std::cout << "in side proccor " << _name << " usage "   << _cpuUsage << std::endl;
+#include "../include/processor.h"
 
-  return _cpuUsage; 
+//  Return the aggregate CPU utilization
+// __________________________________________________________________________________________________________________________________________________
+float Processor::Utilization() {
+  // pase it to ncurses
+  return _cpuUsage;
 }
 
-
+// __________________________________________________________________________________________________________________________________________________
 Processor::Processor() {
   cpus = 0.0;
 }
