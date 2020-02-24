@@ -3,8 +3,8 @@
 #include <iostream>
 #include <optional>
 #include <vector>
-#include "../src/route_model.h"
-#include "../src/route_planner.h"
+#include "../include/route_model.h"
+#include "../include/route_planner.h"
 
 
 // __________________________________________________________________________________________
