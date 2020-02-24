@@ -1,16 +1,22 @@
+// Copyright 2020
+// // Udacity Project
+// // Author: Christian Leininger <info2016frei@gmail.com>
+
+
 #include <unistd.h>
 #include <cstddef>
 #include <set>
 #include <string>
 #include <vector>
 #include <iostream>
-#include <thread>         
-#include <chrono>         
-#include "process.h"
-#include "format.h"
-#include "processor.h"
-#include "system.h"
-#include "linux_parser.h"
+#include <thread>
+#include <chrono>
+#include <algorithm>
+#include "../include/process.h"
+#include "../include/format.h"
+#include "../include/processor.h"
+#include "../include/system.h"
+#include "../include/linux_parser.h"
 
 using std::set;
 using std::size_t;
@@ -20,28 +26,23 @@ using std::vector;
 // __________________________________________________________________________________________________________________________________________________
 System::System() {
   _amountCores = LinuxParser::CpuUtilization().size();   // get amount of cores
-  // std::cout << "amount of corse" << _amountCores << std::endl;
   // create for each core a instance of processort
-  for(int i = 0; i <= _amountCores; i++) {
+  for (int i = 0; i <= _amountCores; i++) {
     Processor p;
     _listOfCores.push_back(p);
   }
-  // get processes
 }
 
 
 // __________________________________________________________________________________________________________________________________________________
 void computeTime(Processor *pro, std::string line, bool old) {
-  // std::cout << "compute" << std::endl;
-  // std::cout << line << std::endl;
   std::string name;
   std::string name1, name2, name3, name4, name5;
   std::string name6, name7, name8, name9, name10;
-  
+
   std::istringstream linestream(line);
-  linestream >> name >> name1 >>  name2 >>  name3 >> name4 >> name5 >>  name6 >>  name7 >> name8 >> name9 >> name10 ;  
+  linestream >> name >> name1 >>  name2 >>  name3 >> name4 >> name5 >>  name6 >>  name7 >> name8 >> name9 >> name10;
   pro->_name = name;
-  // std::cout << name << std::endl;
   int userTime = std::stoi(name1);
   int niceTime = std::stoi(name2);
   int systemTime = std::stoi(name3);
@@ -52,7 +53,7 @@ void computeTime(Processor *pro, std::string line, bool old) {
   int steal = std::stoi(name8);
   int guest = std::stoi(name9);
   int guestnice = std::stoi(name10);
- 
+
   userTime = userTime - guest;
   niceTime = niceTime - guestnice;
   int idleallTime = idleTime + ioWait;
@@ -72,17 +73,14 @@ void computeTime(Processor *pro, std::string line, bool old) {
 
 // __________________________________________________________________________________________________________________________________________________
 void System::updateCpuUtilization() {
-  // std::cout << "update Cpu" << std::endl;
-  // std::cout << "size of core list" << _listOfCores.size() <<std::endl;
   vector<string> cpuLines = LinuxParser::CpuUtilization();
   for (int i = 0; i < static_cast<int>(cpuLines.size()); i++) {
-   computeTime(&_listOfCores[i], cpuLines[i], true);
+    computeTime(&_listOfCores[i], cpuLines[i], true);
   }
-  std::this_thread::sleep_for (std::chrono::milliseconds(500));
- 
+  std::this_thread::sleep_for(std::chrono::milliseconds(500));
   cpuLines = LinuxParser::CpuUtilization();
   for (int i = 0; i < static_cast<int>(cpuLines.size()); i++) {
-   computeTime(&_listOfCores[i], cpuLines[i], false);
+    computeTime(&_listOfCores[i], cpuLines[i], false);
   }
   int totalTimeDiff;
   float idleallTimeDiff;
@@ -90,31 +88,27 @@ void System::updateCpuUtilization() {
     Processor *p = &_listOfCores[i];
     totalTimeDiff = p->_totalTimeNew - p->_totalTimeOld;
     idleallTimeDiff = p->_idleallTimeNew -p->_idleallTimeOld;
-    p->_cpuUsage =(totalTimeDiff - idleallTimeDiff) / totalTimeDiff; 
-    // std::cout << " Cpu " << i << " "  << p->_cpuUsage << std::endl;
+    p->_cpuUsage =(totalTimeDiff - idleallTimeDiff) / totalTimeDiff;
   }
-
 }
 
 
 // __________________________________________________________________________________________________________________________________________________
 //  Return the system's CPU
 Processor& System::Cpu(int number) {
-  cpu_ = _listOfCores[number]; 
-  return cpu_; 
+  cpu_ = _listOfCores[number];
+  return cpu_;
 }
 
 // __________________________________________________________________________________________________________________________________________________
 //  Return a container composed of the system's processes
-vector<Process>& System::Processes() { 
+vector<Process>& System::Processes() {
   // std::cout << "system Processess" << std::endl;
   std::vector<int> pids =  LinuxParser::Pids();
   int number;
   processes_.clear();
   for (int i = 0; i < static_cast<int>(pids.size()); i++) {
-    // std::cout << LinuxParser::Ram(pids[i]) << std::endl;
     number = pids[i];
-    // std::cout << number << std::endl;
     Process p1(number);
     p1.setRam(LinuxParser::Ram(number));
     p1.setCommand(LinuxParser::Command(number));
@@ -123,50 +117,48 @@ vector<Process>& System::Processes() {
     p1.setUserName(LinuxParser::User(number));
     p1.setUid(LinuxParser::Uid(number));
     p1.setUserName(LinuxParser::User(p1.getUid()));
-    // std::cout << p1.getCommand() << " "  << p1.getRam() << "  "   << std::endl;
     processes_.push_back(p1);
-  
   }
   // sort vector after
-   std::sort(processes_.begin(), processes_.end());
-  return processes_; 
+  std::sort(processes_.begin(), processes_.end());
+  return processes_;
 }
 
 // __________________________________________________________________________________________________________________________________________________
 // Return the system's kernel identifier (string)
-std::string System::Kernel() { 
-  return LinuxParser::Kernel(); 
+std::string System::Kernel() {
+  return LinuxParser::Kernel();
 }
 
 // __________________________________________________________________________________________________________________________________________________
 // Return the system's memory utilization
-float System::MemoryUtilization() { 
-  return LinuxParser::MemoryUtilization(); 
+float System::MemoryUtilization() {
+  return LinuxParser::MemoryUtilization();
 }
 
 // __________________________________________________________________________________________________________________________________________________
 // Return the operating system name
-std::string System::OperatingSystem() { 
-  return LinuxParser::OperatingSystem(); 
+std::string System::OperatingSystem() {
+  return LinuxParser::OperatingSystem();
 }
 
 // __________________________________________________________________________________________________________________________________________________
 // Return the number of processes actively running on the system
-int System::RunningProcesses() { 
+int System::RunningProcesses() {
   return  LinuxParser::RunningProcesses();
 }
 
 // __________________________t________________________________________________________________________________________________________________________
 // Return the total number of processes on the system
-int System::TotalProcesses() { 
-  return LinuxParser::TotalProcesses(); 
+int System::TotalProcesses() {
+  return LinuxParser::TotalProcesses();
 }
 
 // __________________________________________________________________________________________________________________________________________________
 // Return the number of seconds since the system started running
-string System::UpTime() { 
+string System::UpTime() {
   string currentTime = "";
-  long  time = LinuxParser::UpTime();
+  int64_t  time = LinuxParser::UpTime();
   _upTime = time;
-  return Format::ElapsedTime(time);  
+  return Format::ElapsedTime(time);
 }
