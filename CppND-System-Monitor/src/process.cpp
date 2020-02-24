@@ -1,24 +1,29 @@
+// Copyright 2020
+// // Udacity Project
+// // Author: Christian Leininger <info2016frei@gmail.com>
+
+
+
 #include <unistd.h>
 #include <cctype>
 #include <sstream>
 #include <string>
 #include <vector>
-
-#include "process.h"
+#include "../include/process.h"
 
 using std::string;
 using std::to_string;
 using std::vector;
 
 // ________________________________________________________________________________________________
-Process::Process(int pid){
+Process::Process(int pid) {
   _pid = pid;
 }
 
 // ________________________________________________________________________________________________
 // Return this process's ID
-int Process::Pid() {   
-  return _pid; 
+int Process::Pid() {
+  return _pid;
 }
 
 
@@ -43,12 +48,12 @@ std::string Process::getCommand() {
 }
 
 // ________________________________________________________________________________________________
-void Process::setUpTime(long int time) {
+void Process::setUpTime(int64_t time) {
   _upTime = time;
 }
 
 // ________________________________________________________________________________________________
-long int Process::getUpTime() {
+int64_t Process::getUpTime() {
   return _upTime;
 }
 
@@ -56,10 +61,11 @@ long int Process::getUpTime() {
 void Process::setUserName(std::string name) {
   _userName = name;
 }
+
 // ________________________________________________________________________________________________
 // Return this process's CPU utilization
-float Process::CpuUtilization() { 
-  return _cpu; 
+float Process::CpuUtilization() {
+  return _cpu;
 }
 
 // ________________________________________________________________________________________________
@@ -69,40 +75,37 @@ void Process::setUid(int uid) {
 
 // ________________________________________________________________________________________________
 int Process::getUid() {
-   return _uid;
+  return _uid;
 }
 
 // ________________________________________________________________________________________________
 // Return the command that generated this process
-string Process::Command() { 
-  return _command; 
+string Process::Command() {
+  return _command;
 }
 
 // ________________________________________________________________________________________________
-// TODO: Return this process's memory utilization
-string Process::Ram() { 
-  return _ram; 
+// Return this process's memory utilization
+string Process::Ram() {
+  return _ram;
 }
 void Process::setCpuUtilization(float cpu) {
   _cpu = cpu;
 }
 // ________________________________________________________________________________________________
-// TODO: Return the user (name) that generated this process
-string Process::User() {  
-  return _userName; 
+// Return the user (name) that generated this process
+string Process::User() {
+  return _userName;
 }
 
 // ________________________________________________________________________________________________
-// TODO: Return the age of this process (in seconds)
-long int Process::UpTime() { 
+// Return the age of this process (in seconds)
+int64_t Process::UpTime() {
   return _upTime; }
 
 // ________________________________________________________________________________________________
-// TODO: Overload the "less than" comparison operator for Process objects
+// Overload the "less than" comparison operator for Process objects
 // REMOVE: [[maybe_unused]] once you define the function
-bool Process::operator<(Process const& a) const { 
-  // std::cout << "sort " << std::endl;
-  // return _command < a._command;
-  // return _ram > a._ram; 
+bool Process::operator<(Process const& a) const {
   return _cpu > a._cpu;
 }
