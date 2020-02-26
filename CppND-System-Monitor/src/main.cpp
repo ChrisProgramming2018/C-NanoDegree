@@ -6,7 +6,10 @@
 #include "../include/ncurses_display.h"
 #include "../include/system.h"
 
-int main() {
+
+int main(int argc, char** argv) {
+  
   System system;
-  NCursesDisplay::Display(system, 40);
+  system.parseCommandLineArguments(argc, argv);
+  NCursesDisplay::Display(system);
 }

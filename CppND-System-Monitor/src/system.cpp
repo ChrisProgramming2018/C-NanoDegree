@@ -71,6 +71,49 @@ void computeTime(Processor *pro, std::string line, bool old) {
 }
 
 
+
+// _____________________________________________________________________________
+void printUsageAndExit()  {
+  std::cerr << "Usage: ./monitor\n";
+  std::cerr << "Available options:\n";
+  std::cerr << "--showProcesses <int> : Amount of how many Processes will be shown.\n";
+  std::cerr << " (default: 10)\n";
+  std::cerr << "--sortBy <string> : Sort by cpu memory time.\n";
+  std::cerr << " (default: cpu)\n";
+  exit(1);
+}
+
+// __________________________________________________________________________________________________________________________________________________
+void System::parseCommandLineArguments(int argc, char** argv) {
+   struct option options[] = {
+     {"showProcesses", 1, NULL, 's'},
+     {"sortBy", 1, NULL, 'b'},
+     {NULL, 0, NULL, 0}
+   };
+   optind = 1;
+
+   _amountProcessesShow = 10;
+   _sortBy = "cpu";
+   while (true) {
+     char c = getopt_long(argc, argv, "s:", options, NULL);
+     if (c == -1) { break; }
+     switch (c) {
+       case 's':
+         _amountProcessesShow = atoi(optarg);
+         break;
+       case 'b':
+         _sortBy = optarg;
+         break;
+       case 'h':
+         printUsageAndExit();
+         break;
+       default:
+         printUsageAndExit();
+     }
+   }
+}
+
+
 // __________________________________________________________________________________________________________________________________________________
 void System::updateCpuUtilization() {
   vector<string> cpuLines = LinuxParser::CpuUtilization();
@@ -103,13 +146,12 @@ Processor& System::Cpu(int number) {
 // __________________________________________________________________________________________________________________________________________________
 //  Return a container composed of the system's processes
 vector<Process>& System::Processes() {
-  // std::cout << "system Processess" << std::endl;
   std::vector<int> pids =  LinuxParser::Pids();
   int number;
   processes_.clear();
   for (int i = 0; i < static_cast<int>(pids.size()); i++) {
     number = pids[i];
-    Process p1(number);
+    Process p1(number, _sortBy);
     p1.setRam(LinuxParser::Ram(number));
     p1.setCommand(LinuxParser::Command(number));
     p1.setUpTime(LinuxParser::UpTime(number));
@@ -161,4 +203,14 @@ string System::UpTime() {
   int64_t  time = LinuxParser::UpTime();
   _upTime = time;
   return Format::ElapsedTime(time);
+}
+
+// __________________________________________________________________________________________________________________________________________________
+int System::getShowProcesses() {
+  return _amountProcessesShow;
+}
+
+// __________________________________________________________________________________________________________________________________________________
+std::string System::getSortBy() {
+  return _sortBy;
 }

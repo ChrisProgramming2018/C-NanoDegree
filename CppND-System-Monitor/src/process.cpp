@@ -16,8 +16,9 @@ using std::to_string;
 using std::vector;
 
 // ________________________________________________________________________________________________
-Process::Process(int pid) {
+Process::Process(int pid, std::string sortBy) {
   _pid = pid;
+  _sortBy = sortBy;
 }
 
 // ________________________________________________________________________________________________
@@ -101,11 +102,16 @@ string Process::User() {
 // ________________________________________________________________________________________________
 // Return the age of this process (in seconds)
 int64_t Process::UpTime() {
-  return _upTime; }
+  return _upTime; 
+}
 
 // ________________________________________________________________________________________________
 // Overload the "less than" comparison operator for Process objects
 // REMOVE: [[maybe_unused]] once you define the function
 bool Process::operator<(Process const& a) const {
-  return _cpu > a._cpu;
+  // std::cout << _sortBy << std::endl;
+  if (_sortBy == "cpu") { return _cpu > a._cpu; }
+  if (_sortBy == "ram") { return _ram > a._ram; }
+  if (_sortBy == "time") { return _upTime > a._upTime;}
+  return _command < a._command;
 }

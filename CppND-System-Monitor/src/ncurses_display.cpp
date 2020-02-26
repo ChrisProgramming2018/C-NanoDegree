@@ -103,6 +103,7 @@ void NCursesDisplay::Display(System& system, int n) {
   cbreak();       // terminate ncurses on ctrl + c
   start_color();  // enable color
 
+  n = system.getShowProcesses();         // get amount of procces that will be show from system
   int x_max{getmaxx(stdscr)};
   WINDOW* system_window = newwin(9 + system._amountCores, x_max - 1, 0, 0);
   WINDOW* process_window =
