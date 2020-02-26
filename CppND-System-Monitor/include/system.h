@@ -1,6 +1,7 @@
 #ifndef SYSTEM_H
 #define SYSTEM_H
 
+#include <getopt.h>
 #include <string>
 #include <vector>
 
@@ -18,15 +19,17 @@ class System {
   int TotalProcesses();               // TODO: See src/system.cpp
   int RunningProcesses();             // TODO: See src/system.cpp
   std::string Kernel();               // TODO: See src/system.cpp
-  std::string OperatingSystem();      // TODO: See src/system.cpp
+  std::string OperatingSystem();
   int _amountCores;
   long int _upTime;
+  void parseCommandLineArguments(int argc, char** argv);
+  int getShowProcesses();
  private:
   // void  computeTime(Processor &pro, std::string line);
   Processor cpu_ = {};
   std::vector<Process> processes_ = {};
   std::vector<Processor> _listOfCores = {};
-  
+  int _amountProcessesShow; 
 };
 
 #endif
