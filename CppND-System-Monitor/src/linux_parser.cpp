@@ -45,7 +45,7 @@ string LinuxParser::OperatingSystem() {
 string LinuxParser::Kernel() {
   string os, version,  kernel;
   string line;
-  std::ifstream stream(kProcDirectory + kVersionFilename);
+  std::ifstream stream(std::string(kProcDirectory) + std::string(kVersionFilename));
   if (stream.is_open()) {
     std::getline(stream, line);
     std::istringstream linestream(line);
@@ -58,7 +58,7 @@ string LinuxParser::Kernel() {
 // _____________________________________________________________________
 vector<int> LinuxParser::Pids() {
   vector<int> pids;
-  DIR* directory = opendir(kProcDirectory.c_str());
+  DIR* directory = opendir(kProcDirectory);
   struct dirent* file;
   while ((file = readdir(directory)) != nullptr) {
     // Is this a directory?
@@ -81,7 +81,7 @@ float LinuxParser::getMemoryUtilization() {
   std::string line;
   std::string totalMemory = "MemTotal:";
   std::string usedMemory = "MemAvailable:";
-  std::ifstream filestream(kProcDirectory + kMeminfoFilename);
+  std::ifstream filestream(std::string(kProcDirectory) + std::string(kMeminfoFilename));
   int start;
   int end;
   int valueTotalMemory;
@@ -113,7 +113,7 @@ int64_t LinuxParser::UpTime() {
   int64_t upTime;
   int start;
   int end;
-  std::ifstream filestream(kProcDirectory + kUptimeFilename);
+  std::ifstream filestream(std::string(kProcDirectory) + std::string(kUptimeFilename));
   if (filestream.is_open()) {
     while (std::getline(filestream, line)) {
       start = line.find_first_of(kNumbers);
@@ -165,7 +165,7 @@ vector<string> LinuxParser::CpuUtilization() {
   string key = "cpu";
   size_t found;
   vector<string> cpus = {};
-  std::ifstream filestream(kProcDirectory + kStatFilename);
+  std::ifstream filestream(std::string(kProcDirectory) + std::string(kStatFilename));
   if (filestream.is_open()) {
     while (std::getline(filestream, line)) {
       found = line.find(key);
@@ -184,7 +184,7 @@ int LinuxParser::TotalProcesses() {
   std::string de;
   int start;
   int totalProcesses;
-  std::ifstream filestream(kProcDirectory + kStatFilename);
+  std::ifstream filestream(std::string(kProcDirectory) + std::string(kStatFilename));
   while (std::getline(filestream, line)) {
     std::size_t found = line.find("processes");
     if (found != std::string::npos) {
