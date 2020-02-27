@@ -9,37 +9,36 @@
 #include "chatbot.h"
 
 // constructor WITHOUT memory allocation
-ChatBot::ChatBot()
-{
-    // invalidate data handles
-    _image = nullptr;
-    _chatLogic = nullptr;
-    _rootNode = nullptr;
+// __________________________________________________________________________________________________________________________________________________
+ChatBot::ChatBot() {
+  // invalidate data handles
+  _image = nullptr;
+  _chatLogic = nullptr;
+  _rootNode = nullptr;
 }
 
 // constructor WITH memory allocation
-ChatBot::ChatBot(std::string filename)
-{
-    std::cout << "ChatBot Constructor" << std::endl;
-    
-    // invalidate data handles
-    _chatLogic = nullptr;
-    _rootNode = nullptr;
+// __________________________________________________________________________________________________________________________________________________
+ChatBot::ChatBot(std::string filename) {
+  std::cout << "ChatBot Constructor" << std::endl;
+  
+  // invalidate data handles
+  _chatLogic = nullptr;
+  _rootNode = nullptr;
 
-    // load image into heap memory
-    _image = new wxBitmap(filename, wxBITMAP_TYPE_PNG);
+  // load image into heap memory
+  _image = new wxBitmap(filename, wxBITMAP_TYPE_PNG);
 }
 
-ChatBot::~ChatBot()
-{
-    std::cout << "ChatBot Destructor" << std::endl;
-
-    // deallocate heap memory
-    if(_image != NULL) // Attention: wxWidgets used NULL and not nullptr
-    {
-        delete _image;
-        _image = NULL;
-    }
+// __________________________________________________________________________________________________________________________________________________
+ChatBot::~ChatBot() {
+  std::cout << "ChatBot Destructor" << std::endl;
+  // deallocate heap memory
+  // Attention: wxWidgets used NULL and not nullptr 
+  if(_image != NULL) {
+    delete _image;
+    _image = NULL;
+  }
 }
 
 //// STUDENT CODE
@@ -48,35 +47,29 @@ ChatBot::~ChatBot()
 ////
 //// EOF STUDENT CODE
 
-void ChatBot::ReceiveMessageFromUser(std::string message)
-{
-    // loop over all edges and keywords and compute Levenshtein distance to query
-    typedef std::pair<GraphEdge *, int> EdgeDist;
-    std::vector<EdgeDist> levDists; // format is <ptr,levDist>
-
-    for (size_t i = 0; i < _currentNode->GetNumberOfChildEdges(); ++i)
-    {
-        GraphEdge *edge = _currentNode->GetChildEdgeAtIndex(i);
-        for (auto keyword : edge->GetKeywords())
-        {
-            EdgeDist ed{edge, ComputeLevenshteinDistance(keyword, message)};
-            levDists.push_back(ed);
-        }
+// __________________________________________________________________________________________________________________________________________________
+void ChatBot::ReceiveMessageFromUser(std::string message) {
+  // loop over all edges and keywords and compute Levenshtein distance to query
+  typedef std::pair<GraphEdge *, int> EdgeDist;
+  std::vector<EdgeDist> levDists; // format is <ptr,levDist>
+  for (size_t i = 0; i < _currentNode->GetNumberOfChildEdges(); ++i) {
+    GraphEdge *edge = _currentNode->GetChildEdgeAtIndex(i);
+    for (auto keyword : edge->GetKeywords()) {
+      EdgeDist ed{edge, ComputeLevenshteinDistance(keyword, message)};
+      levDists.push_back(ed);
     }
-
-    // select best fitting edge to proceed along
-    GraphNode *newNode;
-    if (levDists.size() > 0)
-    {
-        // sort in ascending order of Levenshtein distance (best fit is at the top)
-        std::sort(levDists.begin(), levDists.end(), [](const EdgeDist &a, const EdgeDist &b) { return a.second < b.second; });
-        newNode = levDists.at(0).first->GetChildNode(); // after sorting the best edge is at first position
-    }
-    else
-    {
-        // go back to root node
-        newNode = _rootNode;
-    }
+  }
+  
+  // select best fitting edge to proceed along
+  GraphNode *newNode;
+  if (levDists.size() > 0) {
+    // sort in ascending order of Levenshtein distance (best fit is at the top)
+    std::sort(levDists.begin(), levDists.end(), [](const EdgeDist &a, const EdgeDist &b) { return a.second < b.second; });
+    newNode = levDists.at(0).first->GetChildNode(); // after sorting the best edge is at first position
+  } else {
+    // go back to root node
+    newNode = _rootNode;
+ }
 
     // tell current node to move chatbot to new node
     _currentNode->MoveChatbotToNewNode(newNode);
