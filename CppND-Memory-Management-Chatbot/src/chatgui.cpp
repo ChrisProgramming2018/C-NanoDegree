@@ -31,12 +31,12 @@ bool ChatBotApp::OnInit() {
 // wxWidgets FRAME
 // ___________________________________________________________________________________________________________________________________________________________________________________
 ChatBotFrame::ChatBotFrame(const wxString &title) : wxFrame(NULL, wxID_ANY, title, wxDefaultPosition, wxSize(width, height)) {
-    // create panel with background image
-    ChatBotFrameImagePanel *ctrlPanel = new ChatBotFrameImagePanel(this);
+  // create panel with background image
+  ChatBotFrameImagePanel *ctrlPanel = new ChatBotFrameImagePanel(this);
 
-    // create controls and assign them to control panel
-    _panelDialog = new ChatBotPanelDialog(ctrlPanel, wxID_ANY);
-
+  // create controls and assign them to control panel
+  _panelDialog = new ChatBotPanelDialog(ctrlPanel, wxID_ANY);
+  std::cout << " ChatBotFrame  "   << this  << std::endl;
     // create text control for user input
     int idTextXtrl = 1;
     _userTextCtrl = new wxTextCtrl(ctrlPanel, idTextXtrl, "", wxDefaultPosition, wxSize(width, 50), wxTE_PROCESS_ENTER, wxDefaultValidator, wxTextCtrlNameStr);
@@ -116,28 +116,31 @@ ChatBotPanelDialog::ChatBotPanelDialog(wxWindow *parent, wxWindowID id) : wxScro
   // allow for PNG images to be handled
   wxInitAllImageHandlers();
 
-    //// STUDENT CODE
-    ////
+  //// STUDENT CODE
+  ////
+  // create chat logic instance
+  // since _chatLogic is only used in this   
+  _chatLogic = std::make_unique<ChatLogic>(); 
 
-    // create chat logic instance
-    _chatLogic = new ChatLogic(); 
+  std::cout << " create chat logic" << std::endl;
+  // pass pointer to chatbot dialog so answers can be displayed in GUI
+  _chatLogic->SetPanelDialogHandle(this);
 
-    // pass pointer to chatbot dialog so answers can be displayed in GUI
-    _chatLogic->SetPanelDialogHandle(this);
+  // load answer graph from file
+  _chatLogic->LoadAnswerGraphFromFile(dataPath + "src/answergraph.txt");
 
-    // load answer graph from file
-    _chatLogic->LoadAnswerGraphFromFile(dataPath + "src/answergraph.txt");
-
-    ////
-    //// EOF STUDENT CODE
+  ////
+  //// EOF STUDENT CODE
 }
 
 // ___________________________________________________________________________________________________________________________________________________________________________________
 ChatBotPanelDialog::~ChatBotPanelDialog() {
   //// STUDENT CODE
   ////
-
-  delete _chatLogic;
+  // since I change it to a unqiue pointer it should not be deledet twice
+  // (compile error) 
+  std::cout << " ChatBotPanelDialog  delete  "   << this  << std::endl;
+  // delete _chatLogic;
 
     ////
     //// EOF STUDENT CODE

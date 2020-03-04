@@ -24,6 +24,7 @@ class ChatBot {
   // constructors / destructors
   ChatBot();                     // constructor WITHOUT memory allocation
   ChatBot(std::string filename); // constructor WITH memory allocation
+  ChatBot(const ChatBot &source);
   ~ChatBot();
 
   //// STUDENT CODE
