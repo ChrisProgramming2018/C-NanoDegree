@@ -21,6 +21,7 @@ ChatBot::ChatBot() {
 // __________________________________________________________________________________________________________________________________________________
 ChatBot::ChatBot(std::string filename) {
   std::cout << "ChatBot Constructor" << std::endl;
+  std::cout << "ChatBot Constructor filename " << filename << std::endl;
   
   // invalidate data handles
   _chatLogic = nullptr;
@@ -42,6 +43,60 @@ ChatBot::~ChatBot() {
 
 //// STUDENT CODE
 ////
+// Implement the rule of five 
+// __________________________________________________________________________________________________________________________________________________
+ChatBot::ChatBot(const ChatBot &source) {
+  std::cout << " ChatBot Copy Constructor " << std::endl;
+  this->_image = new wxBitmap(*source._image);
+  this->_chatLogic = source._chatLogic;
+  this->_rootNode =  source._rootNode;
+  this->_currentNode = source._currentNode;
+  this->_chatLogic->SetChatLogicHandle(this);
+}
+
+// __________________________________________________________________________________________________________________________________________________
+ChatBot::ChatBot &operator=(ChatBot &source) {
+  std::cout << " ChatBot Copy Assigment Operator " << std::endl;
+  if (this == &source) { return *this; }
+  this->_image = new wxBitmap(*source._image);
+  this->_chatLogic = source._chatLogic;
+  this->_rootNode =  source._rootNode;
+  this->_currentNode = source._currentNode;
+  this->_chatLogic->SetChatLogicHandle(this);
+  return *this;
+
+// __________________________________________________________________________________________________________________________________________________
+ChatBot::ChatBot(ChatBot &&source) {
+  std::cout << " ChatBot Move Constructor  " << std::endl;
+  this->_image = source._image;
+  this->_chatLogic = source._chatLogic;
+  this->_rootNode =  source._rootNode;
+  this->_currentNode = source._currentNode;
+  this->_chatLogic->SetChatLogicHandle(this);
+  // set source data 
+  source._image = nullptr;
+  source._chatLogic = nullptr;
+  source._rootNode = nullptr;
+  source._currentNode = nullptr;
+}
+
+// __________________________________________________________________________________________________________________________________________________
+ChatBot::ChatBot &operator=(const ChatBot &&source) {
+  std::cout << " ChatBot Move Assigment Operator  " << std::endl;
+  if (this == &source) { return *this;}
+  if (this->_image != nullptr) { delete this->_image; }
+  this->_image = source._image;
+  this->_chatLogic = source._chatLogic;
+  this->_rootNode =  source._rootNode;
+  this->_currentNode = source._currentNode;
+  this->_chatLogic->SetChatLogicHandle(this);
+  // set source data 
+  source._image = nullptr;
+  source._chatLogic = nullptr;
+  source._rootNode = nullptr;
+  source._currentNode = nullptr;
+  return *this;
+}
 
 ////
 //// EOF STUDENT CODE
@@ -89,6 +144,7 @@ void ChatBot::SetCurrentNode(GraphNode *node) {
   _chatLogic->SendMessageToUser(answer);
 }
 
+// __________________________________________________________________________________________________________________________________________________
 int ChatBot::ComputeLevenshteinDistance(std::string s1, std::string s2) {
   // convert both strings to upper-case before comparing
   std::transform(s1.begin(), s1.end(), s1.begin(), ::toupper);
