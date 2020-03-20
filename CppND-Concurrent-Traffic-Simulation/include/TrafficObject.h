@@ -26,7 +26,7 @@ class TrafficObject {
   // getter and setter
   int getID() { return _id; }
   void setPosition(double x, double y);
-  void getPosition(const double &x, const double &y);
+  void getPosition(double &x, double &y);
   ObjectType getType() { return _type; }
 
   // typical behaviour methods
