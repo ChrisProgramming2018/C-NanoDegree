@@ -1,7 +1,11 @@
+// Copyright 2020
+// Udacity Project
+// Author: Christian Leininger <info2016frei@gmail.com>
+
 #include <algorithm>
 #include <iostream>
 #include <chrono>
-#include "TrafficObject.h"
+#include "../include/TrafficObject.h"
 
 // init static variable
 int TrafficObject::_idCnt = 0;

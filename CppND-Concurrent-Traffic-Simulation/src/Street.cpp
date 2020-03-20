@@ -3,9 +3,9 @@
 // Author: Christian Leininger <info2016frei@gmail.com>
 
 #include <iostream>
-#include "Vehicle.h"
-#include "Intersection.h"
-#include "Street.h"
+#include "../include/Vehicle.h"
+#include "../include/Intersection.h"
+#include "../include/Street.h"
 
 
 // __________________________________________________________________________________________________________________________________________________

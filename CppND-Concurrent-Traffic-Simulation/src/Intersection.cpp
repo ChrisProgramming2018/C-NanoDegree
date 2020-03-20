@@ -1,12 +1,17 @@
+// Copyright 2020
+// Udacity Project
+// Author: Christian Leininger <info2016frei@gmail.com>
+
+
 #include <iostream>
 #include <thread>
 #include <chrono>
 #include <future>
 #include <random>
 
-#include "Street.h"
-#include "Intersection.h"
-#include "Vehicle.h"
+#include "../include/Street.h"
+#include "../include/Intersection.h"
+#include "../include/Vehicle.h"
 
 /* Implementation of class "WaitingVehicles" */
 

@@ -1,25 +1,31 @@
+// Copyright 2020
+// Udacity Project
+// Author: Christian Leininger <info2016frei@gmail.com>
+
+
+
 #include <iostream>
 #include <random>
 #include <thread>
 #include <thread>
 #include <chrono>
 #include <future>
-#include "TrafficLight.h"
+#include "../include/TrafficLight.h"
 
 /* Implementation of class "MessageQueue" */
 
 // __________________________________________________________________________________________________________________________________________________
 template <typename T>
 T MessageQueue<T>::receive() {
-    // FP.5a : The method receive should use std::unique_lock<std::mutex> and _condition.wait() 
-    // to wait for and receive new messages and pull them from the queue using move semantics. 
-    // The received object should then be returned by the receive function. 
-    std::unique_lock<std::mutex> uLock(_mutex);
-    _cond.wait(uLock, [this] { return !_messages.empty(); }); // pass unique lock to condition variable
-    // remove last vector element from queue
-    T msg = std::move(_messages.back());
-    _messages.pop_back();
-    return msg;
+  // FP.5a : The method receive should use std::unique_lock<std::mutex> and _condition.wait() 
+  // to wait for and receive new messages and pull them from the queue using move semantics. 
+  // The received object should then be returned by the receive function. 
+  std::unique_lock<std::mutex> uLock(_mutex);
+  _cond.wait(uLock, [this] { return !_messages.empty(); }); // pass unique lock to condition variable
+  // remove last vector element from queue
+  T msg = std::move(_messages.back());
+  _messages.pop_back();
+  return msg;
 }
 
 // __________________________________________________________________________________________________________________________________________________
