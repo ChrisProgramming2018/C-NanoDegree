@@ -1,15 +1,23 @@
+// Copyright 2020
+// Udacity Project
+// Author: Christian Leininger <info2016frei@gmail.com>
+
+
+
 #include <iostream>
 #include <random>
+#include <vector>
 #include "../include/Street.h"
 #include "../include/Intersection.h"
 #include "../include/Vehicle.h"
+
 
 // __________________________________________________________________________________________________________________________________________________
 Vehicle::Vehicle() {
   _currStreet = nullptr;
   _posStreet = 0.0;
   _type = ObjectType::objectVehicle;
-  _speed = 400; // m/s
+  _speed = 400;  // m/s
 }
 
 
@@ -17,7 +25,7 @@ Vehicle::Vehicle() {
 void Vehicle::setCurrentDestination(std::shared_ptr<Intersection> destination) {
   // update destination
   _currDestination = destination;
-  
+
   // reset simulation parameters
   _posStreet = 0.0;
 }
@@ -38,7 +46,7 @@ void Vehicle::drive() {
 
   // initalize variables
   bool hasEnteredIntersection = false;
-  double cycleDuration = 1; // duration of a single simulation cycle in ms
+  double cycleDuration = 1;  // duration of a single simulation cycle in ms
   std::chrono::time_point<std::chrono::system_clock> lastUpdate;
 
   // init stop watch
@@ -48,7 +56,7 @@ void Vehicle::drive() {
     std::this_thread::sleep_for(std::chrono::milliseconds(1));
 
     // compute time difference to stop watch
-    long timeSinceLastUpdate = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - lastUpdate).count();
+    int64_t  timeSinceLastUpdate = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - lastUpdate).count();
     if (timeSinceLastUpdate >= cycleDuration) {
       // update position with a constant velocity motion model
       _posStreet += _speed * timeSinceLastUpdate / 1000;
@@ -67,7 +75,7 @@ void Vehicle::drive() {
       dx = x2 - x1;
       dy = y2 - y1;
       l = sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (x1 - x2));
-      xv = x1 + completion * dx; // new position based on line equation in parameter form
+      xv = x1 + completion * dx;  // new position based on line equation in parameter form
       yv = y1 + completion * dy;
       this->setPosition(xv, yv);
 
@@ -98,9 +106,9 @@ void Vehicle::drive() {
           // this street is a dead-end, so drive back the same way
           nextStreet = _currStreet;
         }
-                
+
         // pick the one intersection at which the vehicle is currently not
-        std::shared_ptr<Intersection> nextIntersection = nextStreet->getInIntersection()->getID() == _currDestination->getID() ? nextStreet->getOutIntersection() : nextStreet->getInIntersection(); 
+        std::shared_ptr<Intersection> nextIntersection = nextStreet->getInIntersection()->getID() == _currDestination->getID() ? nextStreet->getOutIntersection() : nextStreet->getInIntersection();
 
         // send signal to intersection that vehicle has left the intersection
 
@@ -118,5 +126,5 @@ void Vehicle::drive() {
       // reset stop watch for next cycle
       lastUpdate = std::chrono::system_clock::now();
     }
-  } // eof simulation loop
+  }  // eof simulation loop
 }
