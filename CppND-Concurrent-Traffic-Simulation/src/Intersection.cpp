@@ -1,8 +1,14 @@
+// Copyright 2020
+// Udacity Project
+// Author: Christian Leininger <info2016frei@gmail.com>
+
+
 #include <iostream>
 #include <thread>
 #include <chrono>
 #include <future>
 #include <random>
+#include <vector>
 
 #include "../include/Street.h"
 #include "../include/Intersection.h"
@@ -25,7 +31,6 @@ void WaitingVehicles::pushBack(std::shared_ptr<Vehicle> vehicle, std::promise<vo
 
 // ________________________________________________________________________________________________
 void WaitingVehicles::permitEntryToFirstInQueue() {
-
   std::lock_guard<std::mutex> lock(_mutex);
   // get entries from the front of both queues
   auto firstPromise = _promises.begin();
@@ -54,7 +59,6 @@ void Intersection::addStreet(std::shared_ptr<Street> street) {
 
 // ________________________________________________________________________________________________
 std::vector<std::shared_ptr<Street>> Intersection::queryStreets(std::shared_ptr<Street> incoming) {
-
   // store all outgoing streets in a vector ...
   std::vector<std::shared_ptr<Street>> outgoings;
   for (auto it : _streets) {
@@ -72,7 +76,7 @@ void Intersection::addVehicleToQueue(std::shared_ptr<Vehicle> vehicle) {
   std::unique_lock<std::mutex> lck(_mtx);
   std::cout << "Intersection #" << _id << "::addVehicleToQueue: thread id = " << std::this_thread::get_id() << std::endl;
   lck.unlock();
-  
+
   // add new vehicle to the end of the waiting line
   std::promise<void> prmsVehicleAllowedToEnter;
   std::future<void> ftrVehicleAllowedToEnter = prmsVehicleAllowedToEnter.get_future();
@@ -93,7 +97,7 @@ void Intersection::addVehicleToQueue(std::shared_ptr<Vehicle> vehicle) {
 
 // ________________________________________________________________________________________________
 void Intersection::vehicleHasLeft(std::shared_ptr<Vehicle> vehicle) {
-  //std::cout << "Intersection #" << _id << ": Vehicle #" << vehicle->getID() << " has left." << std::endl;
+  // std::cout << "Intersection #" << _id << ": Vehicle #" << vehicle->getID() << " has left." << std::endl;
   // unblock queue processing
   this->setIsBlocked(false);
 }
@@ -101,12 +105,12 @@ void Intersection::vehicleHasLeft(std::shared_ptr<Vehicle> vehicle) {
 // ________________________________________________________________________________________________
 void Intersection::setIsBlocked(bool isBlocked) {
     _isBlocked = isBlocked;
-    //std::cout << "Intersection #" << _id << " isBlocked=" << isBlocked << std::endl;
+    // std::cout << "Intersection #" << _id << " isBlocked=" << isBlocked << std::endl;
 }
 
 // ________________________________________________________________________________________________
 // virtual function which is executed in a thread
-void Intersection::simulate()  { 
+void Intersection::simulate()  {
   // using threads + promises/futures + exceptions
   // FP.6a : In Intersection.h, add a private member _trafficLight of type TrafficLight. At this position, start the simulation of _trafficLight.
   // launch vehicle queue processing in a thread
@@ -117,13 +121,13 @@ void Intersection::simulate()  {
 // ________________________________________________________________________________________________
 void Intersection::processVehicleQueue() {
   // print id of the current thread
-  //std::cout << "Intersection #" << _id << "::processVehicleQueue: thread id = " << std::this_thread::get_id() << std::endl;
+  // std::cout << "Intersection #" << _id << "::processVehicleQueue: thread id = " << std::this_thread::get_id() << std::endl;
 
   // continuously process the vehicle queue
   while (true) {
     // sleep at every iteration to reduce CPU usage
     std::this_thread::sleep_for(std::chrono::milliseconds(1));
-    
+
     // only proceed when at least one vehicle is waiting in the queue
     if (_waitingVehicles.getSize() > 0 && !_isBlocked) {
       // set intersection to "blocked" to prevent other vehicles from entering
@@ -139,9 +143,6 @@ bool Intersection::trafficLightIsGreen() {
   // please include this part once you have solved the final project tasks
   if (_trafficLight.getCurrentPhase() == TrafficLightPhase::green) {
     return true;
-  } else {
-    return false;
   }
-
-  return true; // makes traffic light permanently green
-} 
+  return false;
+}
