@@ -1,15 +1,8 @@
-// Copyright 2020
-// Udacity Project
-// Author: Christian Leininger <info2016frei@gmail.com>
-
-
-
 #include <iostream>
 #include <random>
 #include "../include/Street.h"
 #include "../include/Intersection.h"
 #include "../include/Vehicle.h"
-
 
 // __________________________________________________________________________________________________________________________________________________
 Vehicle::Vehicle() {

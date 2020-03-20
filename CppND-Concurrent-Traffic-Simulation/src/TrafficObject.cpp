@@ -1,7 +1,3 @@
-// Copyright 2020
-// Udacity Project
-// Author: Christian Leininger <info2016frei@gmail.com>
-
 #include <algorithm>
 #include <iostream>
 #include <chrono>
