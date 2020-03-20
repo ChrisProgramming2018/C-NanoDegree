@@ -1,7 +1,12 @@
-#ifndef VEHICLE_H
-#define VEHICLE_H
+// Copyright 2020
+// Udacity Project
+// Author: Christian Leininger <info2016frei@gmail.com>
 
-#include "TrafficObject.h"
+
+#ifndef CPPND_CONCURRENT_TRAFFIC_SIMULATION_INCLUDE_VEHICLE_H_
+#define CPPND_CONCURRENT_TRAFFIC_SIMULATION_INCLUDE_VEHICLE_H_
+
+#include "../include/TrafficObject.h"
 
 // forward declarations to avoid include cycle
 class Street;
@@ -13,7 +18,7 @@ class Vehicle : public TrafficObject, public std::enable_shared_from_this<Vehicl
   Vehicle();
 
   // getters / setters
-  void setCurrentStreet(std::shared_ptr<Street> street) { _currStreet = street; };
+  void setCurrentStreet(std::shared_ptr<Street> street) { _currStreet = street; }
   void setCurrentDestination(std::shared_ptr<Intersection> destination);
 
   // typical behaviour methods
@@ -26,10 +31,10 @@ class Vehicle : public TrafficObject, public std::enable_shared_from_this<Vehicl
   // typical behaviour methods
   void drive();
 
-  std::shared_ptr<Street> _currStreet;            // street on which the vehicle is currently on
-  std::shared_ptr<Intersection> _currDestination; // destination to which the vehicle is currently driving
-  double _posStreet;                              // position on current street
-  double _speed;                                  // ego speed in m/s
+  std::shared_ptr<Street> _currStreet;             // street on which the vehicle is currently on
+  std::shared_ptr<Intersection> _currDestination;  // destination to which the vehicle is currently driving
+  double _posStreet;                               // position on current street
+  double _speed;                                   // ego speed in m/s
 };
 
-#endif
+#endif  // CPPND_CONCURRENT_TRAFFIC_SIMULATION_INCLUDE_VEHICLE_H_
