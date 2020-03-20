@@ -88,21 +88,22 @@ void TrafficLight::cycleThroughPhases() {
 
   // generate different light phase by using random variables
   std::default_random_engine generator;
-  std::uniform_int_distribution<int> distribution(2, 7);
-  int switchTime = distribution(generator);
+  generator.seed(getID());
+  std::uniform_int_distribution<int> distribution(4, 7);
+  double switchTime = distribution(generator);
 
 
   std::cout << " Car has to wait for "  << switchTime  << std::endl;
-  std::chrono::high_resolution_clock::time_point start = std::chrono::high_resolution_clock::now();
-  std::chrono::high_resolution_clock::time_point end = std::chrono::high_resolution_clock::now();
-  auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+  auto start = std::chrono::high_resolution_clock::now();
+  auto end = std::chrono::high_resolution_clock::now();
+  std::chrono::duration<double> elapsed = end - start;
   while (true) {
     // time to switch light
     end = std::chrono::high_resolution_clock::now();
-    duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
-    duration /= 1000000;
+    elapsed = end - start;
+    // std::cout << "time passed" << elapsed.count() << std::endl;
 
-    if (duration >= switchTime) {
+    if (elapsed.count() >= switchTime) {
       switchTime = distribution(generator);
       if (_currentPhase == green) {
         _currentPhase = red;
@@ -115,6 +116,6 @@ void TrafficLight::cycleThroughPhases() {
       std::cout << "time until change " << switchTime << std::endl;
     }
     // wait a second
-    std::this_thread::sleep_for(std::chrono::milliseconds(10000));
+    std::this_thread::sleep_for(std::chrono::milliseconds(1));
   }
 }
