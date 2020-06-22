@@ -9,7 +9,7 @@ It contains relevant attributes as shown below
 */
 class Process {
  public:
-  Process(int pid);
+  Process(int pid, std::string sortBy);
   int Pid();                               // TODO: See src/process.cpp
   std::string User();                      // TODO: See src/process.cpp
   std::string Command();                   // TODO: See src/process.cpp
@@ -32,6 +32,7 @@ class Process {
   std::string _ram;
   std::string _command;
   std::string _userName;
+  std::string _sortBy;
   int _uid;  
   long int _upTime;
   long int _seconds;

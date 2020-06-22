@@ -24,6 +24,8 @@ class System {
   long int _upTime;
   void parseCommandLineArguments(int argc, char** argv);
   int getShowProcesses();
+  std::string _sortBy;                      // TODO: See src/system.cpp
+  std::string getSortBy();
  private:
   // void  computeTime(Processor &pro, std::string line);
   Processor cpu_ = {};
