@@ -4,13 +4,35 @@
 
 
 // #include <torch/script.h> // One-stop header.
-#include <torch/torch.h>
+// #include <torch/torch.h>
+
 #include <iostream>
 #include <memory>
 #include <string>
-#include "lstmModel.h"
+// #include "lstmModel.h"
 
-using torch::indexing::Slice;
+// using torch::indexing::Slice;
+
+
+
+std::string RemoveSpecials(std::string str) {
+  int i=0,len=str.length();
+  while(i<len) {
+    char c=str[i];
+    if (c == ' ') { 
+      ++i;
+      continue;
+    }
+    if(((c>='A')&&(c<='Z'))||((c>='a')&&(c<='z')))  {
+      if((c>='A')&&(c<='Z')) str[i]+=32; //Assuming dictionary contains small letters only.
+      ++i;
+    } else {
+      str.erase(i,1);
+      --len;
+    }
+  }
+  return str;
+}
 
 
 
@@ -27,8 +49,8 @@ int main(int argc, const char* argv[]) {
   const size_t num_epochs = 5;
   const double learning_rate = 0.002;
   const int64_t vocab_size = 30;
-  
-  RNNLM model(vocab_size, embed_size, hidden_size, num_layers);
+  /*
+  // RNNLM model(vocab_size, embed_size, hidden_size, num_layers);
   // model->to(device);
 
   std::cout << "Hello pytorch" << std::endl;
@@ -38,4 +60,8 @@ int main(int argc, const char* argv[]) {
   torch::Device device(cuda_available ? torch::kCUDA : torch::kCPU);
   std::cout << (cuda_available ? "CUDA available. Training on GPU." : "Training on CPU.") << '\n';
   std::cout << start << std::endl;
+  */
+  std::string inputText = "He.ll.o w+#orld 10 ";
+  std::cout << " " << std::endl;
+  std::cout << RemoveSpecials(inputText) << std::endl;
 }
