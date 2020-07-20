@@ -88,8 +88,8 @@ void MyDlg::showTime() {
 void MyDlg::onAddButtonClicked() {
   qDebug() << "Clicke predict ..." << endl;
   _wordInput  = pFirstEdit->text();
-  _predictWord1 = "world 1";
-  _predictWord2 = "world2";
+  _predictWord1 = " world 1 ";
+  _predictWord2 = " world 2 ";
   pWord1Edit->setText( _predictWord1 );
   pWord2Edit->setText( _predictWord2 );
 }

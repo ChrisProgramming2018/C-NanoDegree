@@ -10,4 +10,4 @@ QT += widgets
 
 # Input
 HEADERS += MyDlg.h
-SOURCES += main.cpp MyDlg.cpp
+SOURCES += gui_main.cpp MyDlg.cpp
