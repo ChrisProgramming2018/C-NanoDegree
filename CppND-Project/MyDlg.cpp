@@ -90,6 +90,7 @@ void MyDlg::onAddButtonClicked() {
   _wordInput  = pFirstEdit->text();
   _predictWord1 = " world 1 ";
   _predictWord2 = " world 2 ";
+  pFirstWordButton->setText(_predictWord1);
   pWord1Edit->setText( _predictWord1 );
   pWord2Edit->setText( _predictWord2 );
 }

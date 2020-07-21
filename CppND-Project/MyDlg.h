@@ -1,24 +1,3 @@
-/*
- * =====================================================================================
- *
- *       Filename:  MyDlg.h
- *
- *    Description:  This dialog will demonstrate the use of QFormLayout and the way
- *                  to combine multiple layouts in the same dialog.
- *                  It will also given an idea on how to make use of QLabel, QLineEdit
- *                  and QPushButton and Signals and Slots.
- *
- *        Version:  1.0
- *        Created:  10/22/2016
- *       Revision:  none
- *       Compiler:  gcc
- *
- *         Author:  Jeganathan Swaminathan <jegan@tektutor.org>
- *   Organization:  TekTutor <www.tektutor.org>
- *
- * =====================================================================================
- */
-
 #include <QPushButton>
 #include <QLineEdit>
 #include <QLabel>
