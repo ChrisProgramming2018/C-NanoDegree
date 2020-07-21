@@ -1,36 +1,28 @@
-cmake_minimum_required(VERSION 3.14 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.1.0)
 
-project(language-model VERSION 1.0.0 LANGUAGES CXX)
-list(APPEND CMAKE_PREFIX_PATH "/home/architect/libtorch")
-if(NOT Torch_FOUND)
-    list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../../../cmake")
-    find_package(Torch REQUIRED PATHS "${CMAKE_CURRENT_SOURCE_DIR}/../../../libtorch")
+project(helloworld)
+
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
+
+if(CMAKE_VERSION VERSION_LESS "3.7.0")
+    set(CMAKE_INCLUDE_CURRENT_DIR ON)
 endif()
 
-set(EXECUTABLE_NAME language-model)
-
-add_executable(${EXECUTABLE_NAME})
-target_sources(${EXECUTABLE_NAME} PRIVATE main.cpp
-  lstmModel.h
-  lstmModel.cpp
+find_package(Qt5 COMPONENTS Widgets REQUIRED)
+add_executable(gui-app
+    main.cpp
+    MyDlg.cpp
 )
+find_package(Qt5 COMPONENTS Core REQUIRED)
 
-target_include_directories(${EXECUTABLE_NAME} PRIVATE include)
+set(CMAKE_CXX_FLAGS_COVERAGE "${CMAKE_CXX_FLAGS_RELEASE} -fprofile-arcs -ftest-coverage")
 
-target_link_libraries(${EXECUTABLE_NAME} "${TORCH_LIBRARIES}")
+# set up a mapping so that the Release configuration for the Qt imported target is
+# used in the COVERAGE CMake configuration.
+set_target_properties(Qt5::Core PROPERTIES MAP_IMPORTED_CONFIG_COVERAGE "RELEASE")
 
-set_target_properties(${EXECUTABLE_NAME} PROPERTIES
-  CXX_STANDARD 14
-  CXX_STANDARD_REQUIRED YES
-)
-
-add_custom_command(TARGET ${EXECUTABLE_NAME}
-                   POST_BUILD
-                   COMMAND ${CMAKE_COMMAND} -E make_directory output)
-
-if(MSVC)
-    set_target_properties(${EXECUTABLE_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_CURRENT_BINARY_DIR})
-    set_target_properties(${EXECUTABLE_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_CURRENT_BINARY_DIR})
-    include(copy_torch_dlls)
-    copy_torch_dlls(${EXECUTABLE_NAME})
-endif(MSVC)
+target_link_libraries(gui-app  Qt5::Widgets)
+#target_link_libraries(window  Qt5::Widgets)
+#target_link_libraries(window Qt5::Core)
