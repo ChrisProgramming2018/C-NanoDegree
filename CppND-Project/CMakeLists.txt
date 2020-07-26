@@ -23,6 +23,9 @@ set(EXECUTABLE_NAME gui-app)
 add_executable(${EXECUTABLE_NAME} 
   main.cpp
   helper.cpp
+  corpus.cpp
+  dictionary.cpp
+  rnn_lm.cpp
   MyDlg.cpp
 )
 find_package(Qt5 COMPONENTS Core REQUIRED)
@@ -31,8 +34,9 @@ target_link_libraries(${EXECUTABLE_NAME} ${TORCH_LIBRARIES})
 
 set(CMAKE_CXX_FLAGS_COVERAGE "${CMAKE_CXX_FLAGS_RELEASE} -fprofile-arcs -ftest-coverage")
 target_link_libraries(${EXECUTABLE_NAME} "${TORCH_LIBRARIES}")
-set_property(TARGET ${EXECUTABLE_NAME} PROPERTY CXX_STANDARD 14)
+set_property(TARGET ${EXECUTABLE_NAME} PROPERTY CXX_STANDARD 17)
 
+SET(GCC_COVERAGE_COMPILE_FLAGS "-lstdc++fs")
 
 # set up a mapping so that the Release configuration for the Qt imported target is
 # used in the COVERAGE CMake configuration.

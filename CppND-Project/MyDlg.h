@@ -9,6 +9,9 @@
 #include <string>
 #include <ctime>
 
+#include "helper.h"
+
+
 class MyDlg : public QWidget {
   std::string _word1;
   Q_OBJECT
@@ -17,17 +20,19 @@ class MyDlg : public QWidget {
   QVBoxLayout *pMainLayout;
   QBoxLayout *pButtonLayout;
   QFormLayout *pFormLayout;
-  
+   
   QLineEdit *pFirstEdit, *pWord1Edit,*pWord2Edit, *pResultEdit, *pTimeEdit;
   QLabel *pFirstLabel, *pSecondLabel, *pResultLabel, *pTimeLabel;
-  QPushButton *pAddButton, *pFirstWordButton, *pSecWordButton, *pExitButton;
+  QPushButton *pLoadModelButton, *pAddButton, *pFirstWordButton, *pSecWordButton, *pExitButton;
   QRect *rec;
  public:
   QTimer *timer;
   MyDlg();
   ~MyDlg();
+  LSTMModel *_model;
  private slots:
  void onAddButtonClicked();
+ void onLoadModelButtonClicked();
  void onFirstWordButtonClicked();
  void onSecWordBottonClicked();
  void onExitButtonClicked();

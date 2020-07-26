@@ -4,10 +4,12 @@
 #include <QThread>
 #include <iostream>
 
+#include"helper.h"
 
 MyDlg::MyDlg() {
   this->setFixedSize(1024, 800);
   _word1 = " "; 
+  pLoadModelButton = new QPushButton("Load Model");
   pAddButton = new QPushButton("Predict");
   pFirstWordButton = new QPushButton("First Word");
   pSecWordButton = new QPushButton("Sec Word");
@@ -19,6 +21,7 @@ MyDlg::MyDlg() {
   pButtonLayout->addWidget ( pSecWordButton );
   pButtonLayout->addWidget ( pFirstWordButton );
   pButtonLayout->addWidget ( pAddButton );
+  pButtonLayout->addWidget ( pLoadModelButton );
   pButtonLayout->addStretch ( );
   QTimer *timer = new QTimer(this);
   pFormLayout = new QFormLayout();
@@ -47,6 +50,13 @@ MyDlg::MyDlg() {
   setLayout ( pMainLayout );
   
   connect (
+      pLoadModelButton,
+      SIGNAL ( clicked() ),
+      this,
+      SLOT ( onLoadModelButtonClicked() )
+      );
+
+  connect (
       pAddButton,
       SIGNAL ( clicked() ),
       this,
@@ -72,6 +82,7 @@ MyDlg::MyDlg() {
       );
   connect(timer, SIGNAL(timeout()), this, SLOT(showTime()));
   timer->start(100);
+  _model = new LSTMModel();
 }
 MyDlg::~MyDlg() {
 }
@@ -88,7 +99,8 @@ void MyDlg::showTime() {
 void MyDlg::onAddButtonClicked() {
   qDebug() << "Clicke predict ..." << endl;
   _wordInput  = pFirstEdit->text();
-  _predictWord1 = " world 1 ";
+  _model->readWord(_wordInput.toUtf8().constData());
+  _predictWord1 = _model->predict();
   _predictWord2 = " world 2 ";
   pFirstWordButton->setText(_predictWord1);
   pWord1Edit->setText( _predictWord1 );
@@ -109,3 +121,9 @@ void MyDlg::onExitButtonClicked() {
   qDebug() << "Exit programm ..." << endl;
   exit(0);
 }
+
+void MyDlg::onLoadModelButtonClicked() {
+  _model->loadModel();
+  qDebug() << "Load Model ..." << endl;
+}
+
