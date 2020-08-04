@@ -4,6 +4,7 @@
 
 
 #include <unistd.h>
+#include <QTime>
 #include <QTimer>
 #include <QThread>
 #include <QColorDialog>
@@ -202,7 +203,6 @@ void MyDlg::onPredictButtonClicked() {
     return;
   }
   predict();
-  // _model->readWord(_wordInput.toUtf8().constData());
 }
 
 // ________________________________________________________________________________________________
