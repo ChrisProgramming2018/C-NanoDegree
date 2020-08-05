@@ -9,7 +9,7 @@ set(CMAKE_AUTOUIC ON)
 
 
 
-list(APPEND CMAKE_PREFIX_PATH "/home/programmer/libtorch")
+list(APPEND CMAKE_PREFIX_PATH "${CMAKE_CURRENT_LIST_DIR}/third/libtorch")
 find_package(Torch REQUIRED)
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${TORCH_CXX_FLAGS}")
 
