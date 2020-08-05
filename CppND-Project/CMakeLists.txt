@@ -20,17 +20,18 @@ find_package(Qt5 COMPONENTS Widgets REQUIRED)
 set(EXECUTABLE_NAME gui-app)
 
 add_executable(${EXECUTABLE_NAME})
-target_sources(${EXECUTABLE_NAME} PRIVATE  src/main.cpp
-  src/helper.cpp
-  src/corpus.cpp
-  src/dictionary.cpp
-  src/rnn_lm.cpp
-  src/MyDlg.cpp
-  include/helper.h
-  include/corpus.h
-  include/dictionary.h
-  include/rnn_lm.h
-  include/MyDlg.h
+target_sources(${EXECUTABLE_NAME} PRIVATE  
+  src/Main.cpp
+  src/LSTModel.cpp
+  src/Corpus.cpp
+  src/Dictionary.cpp
+  src/RNNLm.cpp
+  src/Gui.cpp
+  include/LSTModel.h
+  include/Corpus.h
+  include/Dictionary.h
+  include/RNNLm.h
+  include/Gui.h
 )
 
 find_package(Qt5 COMPONENTS Core REQUIRED)
