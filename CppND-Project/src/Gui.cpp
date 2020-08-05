@@ -1,5 +1,5 @@
 // Copyright 2020
-// cpp course
+// cpp project
 // Author: Christian Leininger <info2016frei@gmail.com>
 
 
@@ -46,7 +46,7 @@ MyDlg::MyDlg() {
   pSecWordButton = new QPushButton("Sec Word");
   pThirdWordButton = new QPushButton("Third Word");
   pFourthWordButton = new QPushButton("Fourth Word");
-  pExitButton = new QPushButton("Exit ");
+  pExitButton = new QPushButton("Exit");
 
   // DropBox
   _path = get_current_dir();
@@ -55,7 +55,7 @@ MyDlg::MyDlg() {
   _comboBox = new QComboBox();
   std::string words;
   std::vector<std::string> _files = globVector(_path);
-  for (size_t i = 0; i <= _files.size(); i++) {
+  for (size_t i = 0; i < _files.size(); i++) {
     _comboBox->addItem(tr(_files[i].c_str()));
   }
   // set shortcuts
